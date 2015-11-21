@@ -1,0 +1,19 @@
+{
+  "name": "dat-app",
+  "version": "1.0.0",
+  "description": "an app for dat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karissa/dat-app.git"
+  },
+  "author": "Karissa McKelvey <karissa@karissamck.com> (http://karissamck.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/karissa/dat-app/issues"
+  },
+  "homepage": "https://github.com/karissa/dat-app#readme"
+}
