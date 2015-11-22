@@ -42,8 +42,9 @@ Ractive({
     self.on('share', function (event, i) {
       var dat = self.get('dats')[i]
       // get hash.. then..
-      dat.path
       shared('abd3234sdf')
+      event.original.preventDefault()
+      event.original.stopPropagation()
     })
 
     self.on('open', function (event, i) {
