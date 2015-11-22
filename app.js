@@ -16,3 +16,7 @@ mb.on('ready', function ready () {
 ipc.on('terminate', function terminate (ev) {
   mb.app.terminate()
 })
+
+ipc.on('hide', function hide (ev) {
+  mb.hideWindow()
+})

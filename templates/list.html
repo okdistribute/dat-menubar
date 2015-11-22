@@ -2,7 +2,7 @@
   <h1>Recent data</h1>
 </div>
 {{#each dats:i}}
-<div class="row">
+<div class="row" on-dblclick="open:{{i}}">
   <div class="indicator">
     {{#if this.active}}
     <img src="{{IMG_PATH}}/dat-hex-small.png" on-click="toggle:{{i}}"/>
@@ -11,7 +11,7 @@
     {{/if}}
   </div>
   <div class="content">
-    <span class="path">{{this.path}}</span>
+    <span class="path">{{this.name}}</span>
     <div class="date">{{relativeDate(this.updated)}}</div>
   </div>
   <div class="buttons">
