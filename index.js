@@ -35,6 +35,8 @@ Ractive({
     self.on('toggle', function (event, i) {
       dats[i].active = !dats[i].active
       self.set('dats', dats)
+      event.original.preventDefault()
+      event.original.stopPropagation()
     })
 
     self.on('share', function (event, i) {
