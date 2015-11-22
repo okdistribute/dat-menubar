@@ -19,6 +19,7 @@ function render (ctx) {
     data: ctx.data,
     onrender: ctx.onrender
   })
+  return ract
 }
 render({
   template: fs.readFileSync(path.join(__dirname, './templates/list.html')).toString(),
@@ -26,7 +27,6 @@ render({
   onrender: function () {
   }
 })
-
 
 function throwError (error) {
   var message = error.stack || error.message || JSON.stringify(error)
