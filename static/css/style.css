@@ -18,12 +18,21 @@ h1 {
 .row {
   border-bottom: 1px solid #ccc;
   display: flex;
+  height: 40px;
   padding: 10px;
   cursor: pointer;
 }
 
+.row:hover {
+  background-color: #f4f5f6;
+}
+
 .row img {
   width: 24px;
+  line-height: 40px;
+  vertical-align: middle;
+  padding-top: 7px;
+  padding-right: 5px;
 }
 
 .row .share-button {
@@ -32,6 +41,19 @@ h1 {
 
 .row:hover .share-button {
   display: block;
+}
+
+a {
+  color: #2a3749;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.row .buttons {
+  min-width: 100px;
+  vertical-align: middle;
+  text-align: right;
+  line-height: 40px;
 }
 
 .row .content {
@@ -45,6 +67,7 @@ h1 {
 
 #footer {
   position: fixed;
+  background-color: #f4f5f6;
   bottom: 0px;
   width: 100%;
   text-align: right;
