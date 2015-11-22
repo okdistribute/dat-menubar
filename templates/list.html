@@ -2,7 +2,7 @@
   <h1>Recent data</h1>
 </div>
 {{#each dats:i}}
-<div class="row" on-dblclick="open:{{i}}">
+<div class="row" on-click="open:{{i}}">
   <div class="indicator">
     {{#if this.active}}
     <img src="{{IMG_PATH}}/dat-hex-small.png" on-click="toggle:{{i}}"/>
