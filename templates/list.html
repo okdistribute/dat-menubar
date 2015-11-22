@@ -1,5 +1,22 @@
-{{#each dats}}
-<ul>
-  <li>{{this.path}}, {{relativeDate(this.updated)}}</li>
-</ul>
+<div class="header">
+  <h1>Recent data</h1>
+</div>
+{{#each dats:i}}
+<div class="row">
+  <div class="indicator">
+    {{#if this.active}}
+    <img src="{{IMG_PATH}}/dat-hex-small.png" on-click="toggle:{{i}}"/>
+    {{else}}
+    <img src="{{IMG_PATH}}/dat-hex-small-brown.png" on-click="toggle:{{i}}"/>
+    {{/if}}
+  </div>
+  <div class="content">
+    <span class="path">{{this.path}}</span>
+    <div class="date">{{relativeDate(this.updated)}}</div>
+  </div>
+  <div class="buttons">
+    <button class="share-button" on-click="share">share</button>
+    <button class="share-button" on-click="info">info</button>
+  </div>
+</div>
 {{/each}}

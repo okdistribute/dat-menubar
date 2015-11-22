@@ -4,7 +4,7 @@ var path = require('path')
 
 var mb = menubar({
   dir: __dirname,
-  icon: path.join(__dirname, 'images', 'dat-hex-small.png'),
+  icon: path.join(__dirname, 'static', 'images', 'dat-icon.png'),
   width: 300,
   height: 480
 })

@@ -1,0 +1,43 @@
+body {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+}
+
+#container {
+  margin: 0px;
+}
+
+h1 {
+  padding: 10px;
+  margin: 0px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ccc;
+}
+
+.row {
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  padding: 10px;
+}
+
+.row img {
+  width: 24px;
+  cursor: pointer;
+}
+
+.row .share-button {
+  display: none;
+}
+.row:hover .share-button {
+  display: block;
+}
+
+.row .content {
+  width: 100%;
+  padding: 5px;
+}
+
+#footer {
+
+}

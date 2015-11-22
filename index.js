@@ -2,29 +2,47 @@ var path = require('path')
 var fs = require('fs')
 var Ractive = require('ractive-toolkit')
 
+var IMG_PATH = path.join(__dirname, 'static', 'images')
+
 function getDats (cb) {
   var dats = [
     {
       path: '/Users/karissa/dats/eukaryota',
-      updated: Date.now()
+      updated: Date.now(),
+      active: true
+    },
+    {
+      path: '/Users/karissa/dats/eukaryota',
+      updated: new Date(123423422342),
+      active: false
     }
   ]
   return dats
 }
 
-function render (ctx) {
-  var ract = new Ractive({
-    el: '#container',
-    template: ctx.template,
-    data: ctx.data,
-    onrender: ctx.onrender
-  })
-  return ract
-}
-render({
+Ractive({
+  el: '#container',
   template: fs.readFileSync(path.join(__dirname, './templates/list.html')).toString(),
-  data: {dats: getDats()},
+  data: {dats: getDats(), IMG_PATH: IMG_PATH},
   onrender: function () {
+    var self = this
+    self.on('toggle', function (event, i) {
+      var dats = self.get('dats')
+      dats[i].active = !dats[i].active
+      self.set('dats', dats)
+    })
+  }
+})
+
+Ractive({
+  el: '#footer',
+  template: fs.readFileSync(path.join(__dirname, './templates/footer.html')).toString(),
+  data: {IMG_PATH: IMG_PATH},
+  onrender: function () {
+    var self = this
+    self.on('settings', function (event) {
+      console.log('settings open')
+    })
   }
 })
 
