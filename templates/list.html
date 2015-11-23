@@ -3,11 +3,11 @@
 </div>
 {{#each dats:i}}
 <div class="row" on-click="open:{{i}}">
-  <div class="indicator">
+  <div class="left">
     {{#if this.active}}
-    <img src="{{IMG_PATH}}/dat-hex-small.png" on-click="toggle:{{i}}"/>
+    <div class="indicator active" on-click="toggle:{{i}}"></div>
     {{else}}
-    <img src="{{IMG_PATH}}/dat-hex-small-brown.png" on-click="toggle:{{i}}"/>
+    <div class="indicator inactive" on-click="toggle:{{i}}"></div>
     {{/if}}
   </div>
   <div class="content">

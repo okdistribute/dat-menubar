@@ -83,7 +83,8 @@ Ractive({
   onrender: function () {
     var self = this
     var settings = new Menu()
-    settings.append(new MenuItem({ label: 'Quit dat', click: function () { ipc.send('terminate') } }))
+    settings.append(new MenuItem({ label: 'View logs' }))
+    settings.append(new MenuItem({ label: 'Stop sharing and quit', click: function () { ipc.send('terminate') } }))
     self.on('settings', function (event) {
       event.original.preventDefault()
       settings.popup(remote.getCurrentWindow())

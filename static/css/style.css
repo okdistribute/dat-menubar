@@ -72,3 +72,24 @@ a {
   width: 100%;
   text-align: right;
 }
+
+.indicator {
+  width: 30px;
+  margin: 5px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.indicator.active {
+  background-image: url('../images/dat-data-blank-small.png');
+}
+.indicator.active:hover {
+  background-image: url('../images/dat-data-pause.png');
+}
+.indicator.inactive {
+  background-image: url('../images/dat-hex-small-brown.png');
+}
+.indicator.inactive:hover {
+  background-image: url('../images/dat-data-play.png');
+}
