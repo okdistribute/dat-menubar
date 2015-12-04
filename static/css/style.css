@@ -1,18 +1,18 @@
 body {
-  font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 400;
+  background-color: #f0f0f0;
 }
 
 #container {
   margin: 0px;
 }
 
-h1 {
+h2 {
   padding: 10px;
   margin: 0px;
   text-transform: uppercase;
-  border-bottom: 1px solid #ccc;
+  font-weight: bold;
 }
 
 .row {
@@ -21,10 +21,6 @@ h1 {
   height: 40px;
   padding: 10px;
   cursor: pointer;
-}
-
-.row:hover {
-  background-color: #f4f5f6;
 }
 
 .row img {
@@ -43,17 +39,9 @@ h1 {
   display: block;
 }
 
-a {
-  color: #2a3749;
-  font-weight: bold;
-  text-decoration: none;
-}
-
 .row .buttons {
   min-width: 100px;
-  vertical-align: middle;
   text-align: right;
-  line-height: 40px;
 }
 
 .row .content {

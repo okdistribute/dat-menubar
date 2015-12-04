@@ -1,5 +1,5 @@
 <div class="header">
-  <h1>Recent data</h1>
+  <h2>Recent data</h2>
 </div>
 {{#each dats:i}}
 <div class="row" on-click="open:{{i}}">
@@ -15,7 +15,7 @@
     <div class="date">{{relativeDate(this.updated)}}</div>
   </div>
   <div class="buttons">
-    <a href="#" class="share-button" on-click="share:{{i}}">Share Link</a>
+    <button class="push share-button" on-click="share:{{i}}">share</button>
   </div>
 </div>
 {{/each}}
