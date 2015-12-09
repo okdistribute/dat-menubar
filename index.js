@@ -16,13 +16,13 @@ var dats = [
   {
     name: 'karissa/cfpb',
     path: '/Users/karissa/dev/dats/cfpb',
-    updated: Date.now(),
+    date: Date.now(),
     active: true
   },
   {
     name: 'sunlight/elections',
     path: '/Users/karissa/Dropbox/dats/elections',
-    updated: new Date(123423422342),
+    date: new Date(123423422342),
     active: true
   }
 ]
@@ -36,7 +36,7 @@ Ractive({
 
     dragDrop('.content', function (files, pos) {
       var file = files[0]
-      dats.push({path: file.path, active: true, updated: Date.now()})
+      dats.push(Dat({path: file}))
     })
 
     self.on('toggle', function (event, i) {
@@ -51,7 +51,7 @@ Ractive({
       dialog.showOpenDialog(opts, function (files) {
         if (!files) return
         files.map(function (file) {
-          dats.push({path: file, active: true, updated: Date.now()})
+          dats.push(Dat({path: file}))
         })
       })
     })
@@ -115,4 +115,14 @@ function throwError (error) {
 window.onerror = function errorHandler (message, url, lineNumber) {
   message = message + '\n' + url + ':' + lineNumber
   throwError(message)
+}
+
+function Dat (data) {
+  if (!data.path) throw new Error('Path required.')
+  return {
+    name: data.name || path.basename(data.path),
+    path: data.path,
+    active: data.active || true,
+    date: data.date || Date.now()
+  }
 }
