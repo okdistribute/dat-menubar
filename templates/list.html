@@ -1,21 +1,26 @@
 <div class="header">
-  <h2>Recent data</h2>
+  <h2>dat</h2>
+  <button class="add" on-click="add">+</button>
 </div>
-{{#each dats:i}}
-<div class="row" on-click="open:{{i}}">
-  <div class="left">
-    {{#if this.active}}
-    <div class="indicator active" on-click="toggle:{{i}}"></div>
-    {{else}}
-    <div class="indicator inactive" on-click="toggle:{{i}}"></div>
-    {{/if}}
-  </div>
-  <div class="content">
-    <span class="path">{{this.name}}</span>
-    <div class="date">{{relativeDate(this.updated)}}</div>
-  </div>
-  <div class="buttons">
-    <button class="push share-button" on-click="share:{{i}}">share</button>
+<div class="content">
+  <div class="sourcelist">
+    {{#each dats:i}}
+    <div class="toolbar row" on-click="open:{{i}}">
+      <div class="left">
+        {{#if this.active}}
+        <div class="indicator active" on-click="toggle:{{i}}"></div>
+        {{else}}
+        <div class="indicator inactive" on-click="toggle:{{i}}"></div>
+        {{/if}}
+      </div>
+      <div class="content">
+        <span class="path">{{this.path}}</span>
+        <div class="date">{{relativeDate(this.updated)}}</div>
+      </div>
+      <div class="buttons">
+        <button class="share-button" on-click="share:{{i}}">share</button>
+      </div>
+    </div>
+    {{/each}}
   </div>
 </div>
-{{/each}}

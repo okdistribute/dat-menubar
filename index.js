@@ -1,11 +1,13 @@
 var path = require('path')
 var shell = require('shell')
+var electron = require('electron')
 var ipc = require('ipc')
 var fs = require('fs')
 var Ractive = require('ractive-toolkit')
-var remote = require('electron').remote
-var Menu = remote.Menu
-var MenuItem = remote.MenuItem
+
+var dialog = electron.remote.dialog
+var Menu = electron.remote.Menu
+var MenuItem = electron.remote.MenuItem
 
 var IMG_PATH = path.join(__dirname, 'static', 'images')
 
@@ -21,10 +23,6 @@ var dats = [
     active: true
   }
 ]
-for (var i = 0; i < dats.length; i++) {
-  var dat = dats[i]
-  dat.name = path.basename(dat.path)
-}
 
 Ractive({
   el: '#container',
@@ -39,10 +37,18 @@ Ractive({
       event.original.stopPropagation()
     })
 
+    self.on('add', function (event) {
+      var opts = { properties: [ 'openFile', 'openDirectory' ] }
+      dialog.showOpenDialog(opts, function (files) {
+        if (!files) return
+        files.map(function (file) {
+          dats.push({path: file, active: true, updated: Date.now()})
+        })
+      })
+    })
+
     self.on('share', function (event, i) {
       var dat = self.get('dats')[i]
-      // get hash.. then..
-      shared('abd3234sdf')
       event.original.preventDefault()
       event.original.stopPropagation()
     })

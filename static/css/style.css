@@ -1,7 +1,10 @@
 body {
   font-style: normal;
   font-weight: 400;
-  background-color: #f0f0f0;
+  font-family: monospace;
+  font-size: 16px;
+  background-color: rgba(0,0,0,.9);
+
 }
 
 #container {
@@ -9,18 +12,24 @@ body {
 }
 
 h2 {
-  padding: 10px;
   margin: 0px;
-  text-transform: uppercase;
-  font-weight: bold;
+  padding: 0px;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 10px 5px;
+  background: #41B557;
+}
+.sourcelist { height: 100%; }
 .row {
-  border-bottom: 1px solid #ccc;
   display: flex;
   height: 40px;
   padding: 10px;
   cursor: pointer;
+  background-color: #262626;
+  color: #ccc;
 }
 
 .row img {
@@ -70,9 +79,6 @@ h2 {
 }
 
 .indicator.active {
-  background-image: url('../images/dat-data-blank-small.png');
-}
-.indicator.active:hover {
   background-image: url('../images/dat-data-pause.png');
 }
 .indicator.inactive {
@@ -80,4 +86,8 @@ h2 {
 }
 .indicator.inactive:hover {
   background-image: url('../images/dat-data-play.png');
+}
+
+button {
+  cursor: pointer;
 }

@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/karissa/dat-app#readme",
   "dependencies": {
-    "electron-prebuilt": "^0.35.1",
+    "electron-prebuilt": "^0.35.4",
     "menubar": "^2.3.0",
     "watchify": "^3.6.1"
   }
