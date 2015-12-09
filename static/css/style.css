@@ -1,9 +1,9 @@
 body {
   font-style: normal;
   font-weight: 400;
-  font-family: monospace;
-  font-size: 16px;
-  background-color: rgba(0,0,0,.9);
+  font-size: .85em;
+  background-color: white;
+  font-family: 'Lucida Grande', Helvetica, Arial;
 
 }
 
@@ -17,19 +17,43 @@ h2 {
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 10px 5px;
-  background: #41B557;
+  padding: 6px 10px 3px;
+  background-color: #e8e8e8;
+  text-align: center;
+  border-bottom: 1px solid rgba(0,0,0,.17);
+  color: #5A5A5A;
 }
+
+#footer {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  text-align: right;
+}
+
 .sourcelist { height: 100%; }
 .row {
   display: flex;
-  height: 40px;
-  padding: 10px;
+  height: 35px;
+  padding: 15px;
   cursor: pointer;
-  background-color: #262626;
-  color: #ccc;
+  background-color: white;
+  color: #0f0f0f;
+  border-bottom: 1px solid #efefef;
+}
+
+.add-button {
+  font-size: 20px;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 7px;
+  text-transform: uppercase;
+  color: #b2b2b2;
+}
+
+.row:hover {
+  background-color: rgba(140, 255, 144, 0.15);
 }
 
 .row img {
@@ -54,25 +78,18 @@ h2 {
 }
 
 .row .content {
+  font-size: .9em;
   width: 100%;
-  padding: 5px;
+  padding: 2px 7px;
 }
 
 .date {
+  margin-top: 5px;
   color: #888;
-}
-
-#footer {
-  position: fixed;
-  background-color: #f4f5f6;
-  bottom: 0px;
-  width: 100%;
-  text-align: right;
 }
 
 .indicator {
   width: 30px;
-  margin: 5px;
   height: 30px;
   background-repeat: no-repeat;
   background-size: contain;

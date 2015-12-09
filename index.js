@@ -30,6 +30,13 @@ Ractive({
   data: {dats: dats, IMG_PATH: IMG_PATH},
   onrender: function () {
     var self = this
+
+    var dragDrop = require('drag-drop')
+
+    dragDrop('.content', function (files, pos) {
+      var file = files[0]
+      dats.push({path: file.path, active: true, updated: Date.now()})
+    })
     self.on('toggle', function (event, i) {
       dats[i].active = !dats[i].active
       self.set('dats', dats)
