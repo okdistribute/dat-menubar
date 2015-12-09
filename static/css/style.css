@@ -4,19 +4,16 @@ body {
   font-size: .85em;
   background-color: white;
   font-family: 'Lucida Grande', Helvetica, Arial;
-
 }
 
-#container {
-  margin: 0px;
-}
-
-h2 {
-  margin: 0px;
-  padding: 0px;
-}
+#container { margin: 0px; }
+#content { margin-top: 24px; }
+h2 { margin: 0px; padding: 0px; }
 
 .header {
+  position: fixed;
+  top: 0px;
+  width: 100%;
   padding: 6px 10px 3px;
   background-color: #e8e8e8;
   text-align: center;
@@ -29,18 +26,21 @@ h2 {
   bottom: 0px;
   width: 100%;
   text-align: right;
+  background-color: white;
+  border-top: 1px solid #efefef;
 }
 
-.sourcelist { height: 100%; }
 .row {
   display: flex;
   height: 35px;
   padding: 15px;
   cursor: pointer;
   background-color: white;
-  color: #0f0f0f;
   border-bottom: 1px solid #efefef;
 }
+
+.name { color: #5A5A5A; font-weight: bold; }
+.date { margin-top: 5px; color: #888; }
 
 .add-button {
   font-size: 20px;
@@ -49,12 +49,12 @@ h2 {
   vertical-align: middle;
   padding-top: 7px;
   text-transform: uppercase;
-  color: #b2b2b2;
+  color: #5e5e5e;
 }
 
-.row:hover {
-  background-color: rgba(140, 255, 144, 0.15);
-}
+.row:hover, .settings:hover { background-color: rgba(169, 255, 172, 0.15) }
+.row .share-button { display: none; }
+.row:hover .share-button { display: block; }
 
 .row img {
   width: 24px;
@@ -62,14 +62,6 @@ h2 {
   vertical-align: middle;
   padding-top: 7px;
   padding-right: 5px;
-}
-
-.row .share-button {
-  display: none;
-}
-
-.row:hover .share-button {
-  display: block;
 }
 
 .row .buttons {
@@ -83,28 +75,16 @@ h2 {
   padding: 2px 7px;
 }
 
-.date {
-  margin-top: 5px;
-  color: #888;
-}
-
 .indicator {
   width: 30px;
   height: 30px;
   background-repeat: no-repeat;
   background-size: contain;
 }
+.indicator.active { background-image: url('../images/dat-hex-small.png'); }
+.indicator.active:hover { background-image: url('../images/dat-data-pause.png'); }
+.indicator.inactive { background-image: url('../images/dat-hex-small-brown.png'); }
+.indicator.inactive:hover { background-image: url('../images/dat-data-play.png'); }
 
-.indicator.active {
-  background-image: url('../images/dat-data-pause.png');
-}
-.indicator.inactive {
-  background-image: url('../images/dat-hex-small-brown.png');
-}
-.indicator.inactive:hover {
-  background-image: url('../images/dat-data-play.png');
-}
-
-button {
-  cursor: pointer;
-}
+button { cursor: pointer; }
+.settings { height: 18px; padding: 5px; cursor: pointer; }

@@ -1,7 +1,7 @@
 <div class="header">
   <h2>dat</h2>
 </div>
-<div class="content">
+<div id="content">
   <div class="sourcelist">
     {{#each dats:i}}
     <div class="toolbar row" on-click="open:{{i}}">
@@ -13,12 +13,14 @@
         {{/if}}
       </div>
       <div class="content">
-        <span class="path">{{this.path}}</span>
+        <span class="name">{{this.name}}</span>
         <div class="date">{{relativeDate(this.updated)}}</div>
       </div>
+      <!--
       <div class="buttons">
         <button class="share-button" on-click="share:{{i}}">share</button>
       </div>
+      -->
     </div>
     {{/each}}
     <div class="toolbar row add-button-row" on-click="add">

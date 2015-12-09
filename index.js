@@ -1,4 +1,5 @@
 var path = require('path')
+var dragDrop = require('drag-drop')
 var shell = require('shell')
 var electron = require('electron')
 var ipc = require('ipc')
@@ -13,11 +14,13 @@ var IMG_PATH = path.join(__dirname, 'static', 'images')
 
 var dats = [
   {
+    name: 'karissa/cfpb',
     path: '/Users/karissa/dev/dats/cfpb',
     updated: Date.now(),
     active: true
   },
   {
+    name: 'sunlight/elections',
     path: '/Users/karissa/Dropbox/dats/elections',
     updated: new Date(123423422342),
     active: true
@@ -31,12 +34,11 @@ Ractive({
   onrender: function () {
     var self = this
 
-    var dragDrop = require('drag-drop')
-
     dragDrop('.content', function (files, pos) {
       var file = files[0]
       dats.push({path: file.path, active: true, updated: Date.now()})
     })
+
     self.on('toggle', function (event, i) {
       dats[i].active = !dats[i].active
       self.set('dats', dats)
@@ -72,19 +74,17 @@ Ractive({
     })
 
     var contextMenu = new Menu()
-    contextMenu.append(new MenuItem({ label: 'Create Share link', click: function () { self.fire('share') } }))
+    contextMenu.append(new MenuItem({ label: 'Copy link', click: function () { self.fire('share') } }))
+    contextMenu.append(new MenuItem({ label: 'Copy path', click: function () { self.fire('share') } }))
+    contextMenu.append(new MenuItem({ label: 'Publish new version', click: function () { self.fire('publish') } }))
 
     var rows = document.getElementsByClassName('row')
     for (var i = 0; i < rows.length; i++) {
       var item = rows[i]
       item.addEventListener('contextmenu', function (e) {
         e.preventDefault()
-        contextMenu.popup(remote.getCurrentWindow())
+        contextMenu.popup(electron.remote.getCurrentWindow())
       })
-    }
-
-    function shared (hash) {
-
     }
   }
 })
@@ -96,11 +96,11 @@ Ractive({
   onrender: function () {
     var self = this
     var settings = new Menu()
-    settings.append(new MenuItem({ label: 'View logs' }))
+    settings.append(new MenuItem({ label: 'Debug' }))
     settings.append(new MenuItem({ label: 'Stop sharing and quit', click: function () { ipc.send('terminate') } }))
     self.on('settings', function (event) {
       event.original.preventDefault()
-      settings.popup(remote.getCurrentWindow())
+      settings.popup(electron.remote.getCurrentWindow())
     })
   }
 })
