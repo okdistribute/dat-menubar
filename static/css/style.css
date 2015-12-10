@@ -7,7 +7,7 @@ body {
 }
 
 #container { margin: 0px; }
-#content { margin-top: 24px; }
+#content { }
 h2 { margin: 0px; padding: 0px; }
 
 .header {
@@ -33,14 +33,14 @@ h2 { margin: 0px; padding: 0px; }
 .row {
   display: flex;
   height: 35px;
-  padding: 15px;
+  padding: 10px;
   cursor: pointer;
   background-color: white;
   border-bottom: 1px solid #efefef;
 }
 
-.name { color: #5A5A5A; font-weight: bold; }
-.date { margin-top: 5px; color: #888; }
+.name { color: #1A1A1A; font-size: .9em; }
+.date { margin-top: 5px; color: #aaa; font-size: .85em; }
 
 .add-button {
   font-size: 20px;
@@ -52,7 +52,7 @@ h2 { margin: 0px; padding: 0px; }
   color: #5e5e5e;
 }
 
-.row:hover, .settings:hover { background-color: rgba(169, 255, 172, 0.15) }
+.row:hover, .settings:hover { background-color: rgba(168, 255, 172, 0.10) }
 .row .share-button { display: none; }
 .row:hover .share-button { display: block; }
 
@@ -72,12 +72,13 @@ h2 { margin: 0px; padding: 0px; }
 .row .content {
   font-size: .9em;
   width: 100%;
-  padding: 2px 7px;
+  padding: 5px 7px;
 }
 
 .indicator {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 25px;
+  margin-top: 5px;
   background-repeat: no-repeat;
   background-size: contain;
 }

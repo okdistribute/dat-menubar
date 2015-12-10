@@ -1,11 +1,11 @@
 var menubar = require('menubar')
-var ipc = require('ipc')
+var ipc = require('electron').ipcMain
 var path = require('path')
 
 var mb = menubar({
   dir: __dirname,
   icon: path.join(__dirname, 'static', 'images', 'dat-icon.png'),
-  width: 300
+  width: 250
 })
 
 mb.on('ready', function ready () {

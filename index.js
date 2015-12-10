@@ -1,5 +1,5 @@
 var path = require('path')
-var dragDrop = require('drag-drop')
+var dragDrop = require('drag-and-drop-files')
 var shell = require('shell')
 var electron = require('electron')
 var ipc = require('ipc')
@@ -34,9 +34,9 @@ Ractive({
   onrender: function () {
     var self = this
 
-    dragDrop('.content', function (files, pos) {
+    dragDrop(document.querySelector('#content'), function (files) {
       var file = files[0]
-      dats.push(Dat({path: file}))
+      dats.push(Dat({path: file.path}))
     })
 
     self.on('toggle', function (event, i) {
