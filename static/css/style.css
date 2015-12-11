@@ -22,12 +22,15 @@ h2 { margin: 0px; padding: 0px; }
 }
 
 #footer {
+  display: flex;
+  justify-content: space-between;
   position: fixed;
   bottom: 0px;
   width: 100%;
   text-align: right;
   background-color: white;
   border-top: 1px solid #efefef;
+  margin-bottom: 3px;
 }
 
 .row {
@@ -43,16 +46,16 @@ h2 { margin: 0px; padding: 0px; }
 .date { margin-top: 5px; color: #aaa; font-size: .85em; }
 
 .add-button {
-  font-size: 20px;
-  width: 100%;
+  font-size: 24px;
+  font-weight: bold;
   text-align: center;
   vertical-align: middle;
-  padding-top: 7px;
+  padding: 3px 5px;
   text-transform: uppercase;
   color: #5e5e5e;
 }
 
-.row:hover, .settings:hover { background-color: rgba(168, 255, 172, 0.10) }
+.row:hover, .clickable:hover { cursor: pointer; background-color: rgba(168, 255, 172, 0.10) }
 .row .share-button { display: none; }
 .row:hover .share-button { display: block; }
 
@@ -88,4 +91,4 @@ h2 { margin: 0px; padding: 0px; }
 .indicator.inactive:hover { background-image: url('../images/dat-data-play.png'); }
 
 button { cursor: pointer; }
-.settings { height: 18px; padding: 5px; cursor: pointer; }
+.settings { height: 18px; padding: 8px 5px 3px; cursor: pointer; }

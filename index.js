@@ -46,16 +46,6 @@ Ractive({
       event.original.stopPropagation()
     })
 
-    self.on('add', function (event) {
-      var opts = { properties: [ 'openFile', 'openDirectory' ] }
-      dialog.showOpenDialog(opts, function (files) {
-        if (!files) return
-        files.map(function (file) {
-          dats.push(Dat({path: file}))
-        })
-      })
-    })
-
     self.on('share', function (event, i) {
       var dat = self.get('dats')[i]
       event.original.preventDefault()
@@ -101,6 +91,15 @@ Ractive({
     self.on('settings', function (event) {
       event.original.preventDefault()
       settings.popup(electron.remote.getCurrentWindow())
+    })
+    self.on('add', function (event) {
+      var opts = { properties: [ 'openFile', 'openDirectory' ] }
+      dialog.showOpenDialog(opts, function (files) {
+        if (!files) return
+        files.map(function (file) {
+          dats.push(Dat({path: file}))
+        })
+      })
     })
   }
 })
