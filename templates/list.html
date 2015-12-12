@@ -9,20 +9,18 @@
     <div class="toolbar row" on-click="open:{{i}}">
       <div class="left">
         {{#if this.active}}
-        <div class="indicator active" on-click="toggle:{{i}}"></div>
+        <div class="indicator active" on-click="stop:{{i}}"></div>
         {{else}}
-        <div class="indicator inactive" on-click="toggle:{{i}}"></div>
+        <div class="indicator inactive" on-click="share:{{i}}"></div>
         {{/if}}
       </div>
       <div class="content">
         <span class="name">{{this.name}}</span>
         <div class="date">{{relativeDate(this.date)}}</div>
       </div>
-      <!--
       <div class="buttons">
         <button class="share-button" on-click="share:{{i}}">share</button>
       </div>
-      -->
     </div>
     {{/each}}
   </div>

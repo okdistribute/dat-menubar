@@ -18,9 +18,14 @@
   },
   "homepage": "https://github.com/karissa/dat-app#readme",
   "dependencies": {
+    "drag-and-drop-files": "0.0.1",
     "drag-drop": "^2.3.1",
     "electron-prebuilt": "^0.35.4",
+    "electron-rpc": "^1.0.3",
     "menubar": "^2.3.0",
+    "mkdirp": "^0.5.1",
+    "ractive-toolkit": "^1.0.2",
+    "register-multicast-dns": "^1.1.0",
     "watchify": "^3.6.1"
   }
 }
