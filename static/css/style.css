@@ -74,19 +74,18 @@ button {
 }
 #notification.success {
   display: block;
-  color: green;
+  color: #054E05;
   height: 100%;
   background: rgba(0, 0, 0, 0.10);
   transition: display .5, background .5s;
   z-index: 999;
-  font-size: 68px;
+  font-size: 48px;
   text-align: center;
   padding: 5px;
 }
 
 .centered {
   margin-top: 50%;
-  transform: translateY(-25%);
 }
 
 .row img {
