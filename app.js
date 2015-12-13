@@ -2,7 +2,7 @@ var menubar = require('menubar')
 var ipc = require('electron').ipcMain
 var fs = require('fs')
 var mkdirp = require('mkdirp')
-var dat = require('dat')
+var Dat = require('dat')
 var path = require('path')
 var dialog = require('electron').dialog
 var homedir = require('os-homedir')()
@@ -102,41 +102,48 @@ mb.on('ready', function ready () {
     stop(req.body, cb)
   })
 
-  function start (data, cb) {
+  function restart (dat, cb) {
+    stop(dat, function (err, dat) {
+      if (err) throw err
+      start(dat, cb)
+    })
+  }
+
+  function start (dat, cb) {
+    if (RUNNING[dat.path]) return restart(dat, cb)
     var config = loadConfig()
-    var db = dat(data.dat.path)
-    if (RUNNING[data.dat.path]) return cb(null, data.dat)
+    var db = Dat(dat.path)
     db.share(done)
 
     function done (err, link, port, close) {
       if (err) return cb(err)
-      RUNNING[data.dat.path] = close
+      RUNNING[dat.path] = close
 
-      data.dat.link = link
-      data.dat.active = true
-      data.dat.date = Date.now()
-      config.dats[data.dat.path] = data.dat
+      dat.link = link
+      dat.active = true
+      dat.date = Date.now()
+      config.dats[dat.path] = dat
       writeConfig(config)
 
-      cb(null, data.dat)
+      cb(null, dat)
     }
   }
 
-  function stop (data, cb) {
+  function stop (dat, cb) {
     var config = loadConfig()
-    var close = RUNNING[data.dat.path]
+    var close = RUNNING[dat.path]
     if (close) close(done)
     else done()
     function done (err) {
       if (err) return cb(err)
-      RUNNING[data.dat.path] = undefined
+      RUNNING[dat.path] = undefined
 
-      data.dat.active = false
-      console.log('closing', data.dat)
-      config.dats[data.dat.path] = data.dat
+      dat.active = false
+      console.log('closing', dat)
+      config.dats[dat.path] = dat
       writeConfig(config)
 
-      cb(null, data.dat)
+      cb(null, dat)
     }
   }
 
@@ -146,7 +153,7 @@ mb.on('ready', function ready () {
     for (var i = 0; i < keys.length; i++) {
       var dat = conf.dats[keys[i]]
       if (dat.active) {
-        start({dat: dat}, function (err, dat) {
+        start(dat, function (err, dat) {
           if (err) throw err
           console.log('Started', dat.link)
         })

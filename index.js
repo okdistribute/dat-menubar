@@ -36,7 +36,7 @@ function render (dats) {
       })
 
       self.on('stop', function (event, path) {
-        client.request('stop', {dat: dats[path]}, function (err, dat) {
+        client.request('stop', dats[path], function (err, dat) {
           if (err) throw err
           dats[path] = dat
           self.set('dats', dats)
@@ -90,7 +90,7 @@ function render (dats) {
       })
 
       function share (path) {
-        client.request('start', {dat: dats[path]}, function (err, dat) {
+        client.request('start', dats[path], function (err, dat) {
           if (err) return console.error(err)
           dats[path] = dat
           self.set('dats', dats)
