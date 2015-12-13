@@ -28,6 +28,13 @@ function render (dats) {
     onrender: function () {
       var self = this
 
+      function notify (type, message) {
+        self.set('notify', {type: type, message: message})
+        setTimeout(function () {
+          self.set('notify', {type: '', message: ''})
+        }, 2000)
+      }
+
       dragDrop(document.querySelector('#content'), function (files) {
         var file = files[0]
         var dat = Dat({path: file.path})
@@ -60,7 +67,7 @@ function render (dats) {
         var contextMenu = new Menu()
         contextMenu.append(new MenuItem({ label: 'Copy link', click: function () {
           var dat = dats[path]
-          electron.clipboard.writeText(dat.link)
+          copy(dat)
         }}))
         event.original.preventDefault()
         contextMenu.popup(electron.remote.getCurrentWindow())
@@ -93,9 +100,14 @@ function render (dats) {
         client.request('start', dats[path], function (err, dat) {
           if (err) return console.error(err)
           dats[path] = dat
+          copy(dat)
           self.set('dats', dats)
-          electron.clipboard.writeText(dat.link)
         })
+      }
+
+      function copy (dat) {
+        electron.clipboard.writeText(dat.link)
+        notify('success', 'Link Copied')
       }
     }
   })

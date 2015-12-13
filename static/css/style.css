@@ -36,6 +36,7 @@ button {
   position: fixed;
   bottom: 0px;
   width: 100%;
+  z-index: 0;
   text-align: right;
   background-color: white;
   border-top: 1px solid #efefef;
@@ -67,6 +68,26 @@ button {
 .row:hover, .clickable:hover { cursor: pointer; background-color: rgba(168, 255, 172, 0.10) }
 .row .share-button { display: none; }
 .row:hover .share-button { display: block; }
+#notification {
+  position: absolute;
+  background: rgba(0, 0, 0, 0);
+}
+#notification.success {
+  display: block;
+  color: green;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.10);
+  transition: display .5, background .5s;
+  z-index: 999;
+  font-size: 68px;
+  text-align: center;
+  padding: 5px;
+}
+
+.centered {
+  margin-top: 50%;
+  transform: translateY(-25%);
+}
 
 .row img {
   width: 24px;
