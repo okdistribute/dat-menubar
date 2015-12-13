@@ -2,6 +2,7 @@ var path = require('path')
 var dragDrop = require('drag-and-drop-files')
 var shell = require('shell')
 var electron = require('electron')
+var ipc = require('ipc')
 var fs = require('fs')
 var Ractive = require('ractive-toolkit')
 var menu = require('./menu.js')(Ractive)
@@ -60,7 +61,7 @@ function render (dats) {
 
       self.on('open', function (event, path) {
         shell.openItem(path)
-        electron.ipcMain.send('hide')
+        ipc.send('hide')
       })
 
       self.on('actions', function (event, path) {
@@ -75,7 +76,7 @@ function render (dats) {
 
       var settings = new Menu()
       settings.append(new MenuItem({ label: 'Debug' }))
-      settings.append(new MenuItem({ label: 'Stop sharing and quit', click: function () { electron.ipcMain.send('quit') } }))
+      settings.append(new MenuItem({ label: 'Stop sharing and quit', click: function () { ipc.send('quit') } }))
 
       self.on('settings', function (event) {
         event.original.preventDefault()
