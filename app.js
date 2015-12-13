@@ -32,7 +32,7 @@ mb.on('show', function show () {
   app.send('show')
 })
 
-ipc.on('terminate', function terminate (ev) {
+ipc.on('quit', function terminate (ev) {
   mb.app.terminate()
 })
 
@@ -81,7 +81,6 @@ function loadConfig () {
   return conf
 }
 
-
 mb.on('ready', function ready () {
   configure()
 
@@ -107,8 +106,7 @@ mb.on('ready', function ready () {
     var config = loadConfig()
     var db = dat(data.dat.path)
     if (RUNNING[data.dat.path]) return cb(null, data.dat)
-    if (data.dat.link) db.serve(data.dat.link, done)
-    else db.share(done)
+    db.share(done)
 
     function done (err, link, port, close) {
       if (err) return cb(err)
@@ -131,10 +129,10 @@ mb.on('ready', function ready () {
     else done()
     function done (err) {
       if (err) return cb(err)
-      console.log('closing.')
       RUNNING[data.dat.path] = undefined
 
       data.dat.active = false
+      console.log('closing', data.dat)
       config.dats[data.dat.path] = data.dat
       writeConfig(config)
 

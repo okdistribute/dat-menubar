@@ -5,13 +5,13 @@
 -->
 <div id="content">
   <div class="sourcelist">
-    {{#each dats:i}}
-    <div class="toolbar row" on-click="open:{{i}}">
+    {{#each dats}}
+    <div class="toolbar row" on-click="open:{{path}}" on-menu="actions:{{path}}">
       <div class="left">
         {{#if this.active}}
-        <div class="indicator active" on-click="stop:{{i}}"></div>
+        <div class="indicator active" on-click="stop:{{path}}"></div>
         {{else}}
-        <div class="indicator inactive" on-click="share:{{i}}"></div>
+        <div class="indicator inactive" on-click="share:{{path}}"></div>
         {{/if}}
       </div>
       <div class="content">
@@ -19,9 +19,13 @@
         <div class="date">{{relativeDate(this.date)}}</div>
       </div>
       <div class="buttons">
-        <button class="share-button" on-click="share:{{i}}">share</button>
+        <button class="share-button" on-click="share:{{path}}">Share link</button>
       </div>
     </div>
     {{/each}}
   </div>
+</div>
+<div id="footer">
+  <img class="settings clickable" src="{{IMG_PATH}}/settings.png" on-click="settings" />
+  <div on-click="add" class="add-button clickable"><h2>+</h2></div>
 </div>
