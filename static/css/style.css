@@ -15,8 +15,9 @@ button {
   border: 1px solid #f0f0f0;
   /* font-size: 13px; */
   font-family: 'Lucida Grande', Helvetica, Arial;
-  padding: 7px 10px;
-  margin: 3px 5px 0px 0px;
+  padding: 7px;
+  border-radius: 3px;
+  margin: 3px 0px 0px 0px;
 }
 
 .header {
@@ -38,9 +39,9 @@ button {
   width: 100%;
   z-index: 0;
   text-align: right;
-  background-color: white;
+  background-color: rgba(239, 239, 239, 0.32);
   border-top: 1px solid #efefef;
-  margin-bottom: 3px;
+  padding-bottom: 3px;
 }
 
 .row {
@@ -97,7 +98,7 @@ button {
 }
 
 .row .buttons {
-  min-width: 100px;
+  min-width: 80px;
   text-align: right;
 }
 

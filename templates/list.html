@@ -9,7 +9,7 @@
 <div id="content">
   <div class="sourcelist">
     {{#each dats}}
-    <div class="toolbar row" on-click="open:{{path}}" on-menu="actions:{{path}}">
+    <div class="toolbar row" on-click="open:{{path}}" on-contextmenu="actions:{{path}}">
       <div class="left">
         {{#if this.active}}
         <div class="indicator active" on-click="stop:{{path}}"></div>

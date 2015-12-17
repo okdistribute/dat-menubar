@@ -15,7 +15,7 @@ var RUNNING = {}
 var mb = menubar({
   dir: __dirname,
   icon: path.join(__dirname, 'static', 'images', 'dat-icon.png'),
-  width: 250
+  width: 280
 })
 
 mb.on('ready', function ready () {
