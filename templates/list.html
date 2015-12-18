@@ -6,6 +6,10 @@
 <div id="notification" class="{{notify.type}}">
   <h1 class="message centered">{{notify.message}}</h1>
 </div>
+<div id="download" class="hidden">
+  <input type="text" value="{{link}}" placeholder="Paste link here..." />
+  <button type="submit" on-click="download">download</button>
+</div>
 <div id="content">
   <div class="sourcelist">
     {{#each dats}}
@@ -28,7 +32,8 @@
     {{/each}}
   </div>
 </div>
-<div id="footer">
-  <img class="settings clickable" src="{{IMG_PATH}}/settings.png" on-click="settings" />
-  <div on-click="add" class="add-button clickable"><h2>+</h2></div>
+<div class="footer bookend">
+    <img class="settings clickable" src="{{IMG_PATH}}/settings.png" on-click="settings" />
+    <!--<div on-click="download" class="add-button clickable"><h2>Add URL</h2></div>-->
+    <div on-click="add" class="add-button clickable"><h2>+</h2></div>
 </div>

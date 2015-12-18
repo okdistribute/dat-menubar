@@ -7,8 +7,9 @@ body {
 }
 
 #container { margin: 0px; }
-#content { }
+#content { margin-bottom: 40px;}
 h2 { margin: 0px; padding: 0px; }
+.hidden { display: none; }
 
 button {
   background-color: white;
@@ -24,23 +25,29 @@ button {
   position: fixed;
   top: 0px;
   width: 100%;
-  padding: 6px 10px 3px;
-  background-color: #e8e8e8;
   text-align: center;
   border-bottom: 1px solid rgba(0,0,0,.17);
   color: #5A5A5A;
 }
 
-#footer {
+.header {
+  top: 0px;
+  border-bottom: 1px solid #efefef;
+}
+
+.footer {
+  bottom: 0px;
+  border-top: 1px solid #efefef;
+}
+
+.bookend {
   display: flex;
   justify-content: space-between;
   position: fixed;
-  bottom: 0px;
   width: 100%;
   z-index: 0;
   text-align: right;
-  background-color: rgba(239, 239, 239, 0.32);
-  border-top: 1px solid #efefef;
+  background-color: rgb(239, 239, 239);
   padding-bottom: 3px;
 }
 
@@ -116,10 +123,8 @@ button {
   background-size: contain;
 }
 
-.indicator.active { background-image: url('../images/dat-hex-small.png'); }
-.indicator.active:hover { background-image: url('../images/dat-data-pause.png'); }
-.indicator.inactive { background-image: url('../images/dat-hex-small-brown.png'); }
-.indicator.inactive:hover { background-image: url('../images/dat-data-play.png'); }
+.indicator.active { background-image: url('../images/dat-data-pause.png'); }
+.indicator.inactive { background-image: url('../images/dat-data-play.png'); }
 
 button { cursor: pointer; }
 .settings { height: 18px; padding: 8px 5px 3px; cursor: pointer; }

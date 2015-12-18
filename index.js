@@ -53,10 +53,32 @@ function render (dats) {
       })
 
       self.on('share', function (event, path) {
-        share(path)
+        share(dats[path])
         event.original.preventDefault()
         event.original.stopPropagation()
       })
+
+      function share (dat) {
+        client.request('share', dat, function (err, dat) {
+          if (err) return console.error(err)
+          dats[path] = dat
+          copy(dat)
+          self.set('dats', dats)
+        })
+      }
+
+      function download (dat) {
+        client.request('download', dat, function (err, dat) {
+          if (err) return console.error(err)
+          dats[path] = dat
+          self.set('dats', dats)
+        })
+      }
+
+      function copy (dat) {
+        electron.clipboard.writeText(dat.link)
+        notify('success', 'Link copied')
+      }
 
       self.on('open', function (event, path) {
         shell.openItem(path)
@@ -84,58 +106,42 @@ function render (dats) {
       })
 
       var addMenu = new Menu()
-      addMenu.append(new MenuItem({ label: 'Download from link', click: addLink }))
-      addMenu.append(new MenuItem({ label: 'Share...', click: addNew }))
+      addMenu.append(new MenuItem({ label: 'Download from link', click: function () {
+        var downloadBox = document.querySelector('#download')
+        downloadBox.classList.remove('hidden')
+      }}))
+      addMenu.append(new MenuItem({ label: 'Share...', click: addButton }))
 
       self.on('add', function (event) {
         event.original.preventDefault()
         addMenu.popup(electron.remote.getCurrentWindow())
       })
 
-      function addLink () {
+      function addButton () {
+        var opts = {properties: [ 'openDirectory' ]}
+        dialog.showOpenDialog(opts, function (directories) {
+          if (!directories) return
+          var dat = Dat({path: directories[0]})
+          share(dat)
+        })
+      }
+
+      self.on('download', function (event) {
+        event.original.preventDefault()
+        var link = self.get('link')
+        if (!link) return
         var dialogOpts = {
           title: 'Download location.',
           properties: [ 'openDirectory' ]
         }
         dialog.showOpenDialog(dialogOpts, function (directories) {
           if (!directories) return
-          download(link, directories[0])
+          var downloadBox = document.querySelector('#download')
+          downloadBox.classList.add('hidden')
+          var dat = Dat({link: link, path: directories[0]})
+          download(dat)
         })
-      }
-
-      function addNew () {
-        var opts = {properties: [ 'openDirectory' ]}
-        dialog.showOpenDialog(opts, function (directories) {
-          if (!directories) return
-          var dat = Dat({path: directories[0]})
-          dats[dat.path] = dat
-          self.set('dats', dats)
-          share(dat.path)
-        })
-      }
-
-      function download (link, path) {
-        client.request('download', path, function (err, dat) {
-          if (err) return console.error(err)
-          dats[dat.path] = dat
-          notify('success', 'Download complete')
-          self.set('dats', dats)
-        })
-      }
-
-      function share (path) {
-        client.request('start', dats[path], function (err, dat) {
-          if (err) return console.error(err)
-          dats[path] = dat
-          copy(dat)
-          self.set('dats', dats)
-        })
-      }
-
-      function copy (dat) {
-        electron.clipboard.writeText(dat.link)
-        notify('success', 'Link copied')
-      }
+      })
     }
   })
 }
@@ -158,6 +164,7 @@ function Dat (data) {
     name: data.name || path.basename(data.path),
     path: data.path,
     active: data.active || true,
+    link: data.link || undefined,
     date: data.date || Date.now()
   }
 }

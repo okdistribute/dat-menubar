@@ -94,13 +94,32 @@ mb.on('ready', function ready () {
     cb(conf.dats[req.body.path])
   })
 
-  app.on('start', function task (req, cb) {
+  app.on('download', function task (req, cb) {
+    download(req.body, cb)
+  })
+
+  app.on('share', function task (req, cb) {
     start(req.body, cb)
   })
 
   app.on('stop', function task (req, cb) {
     stop(req.body, cb)
   })
+
+  function download (dat, cb) {
+    var config = loadConfig()
+    var db = Dat(dat.path)
+    db.download(dat.link, done)
+
+    function done (err, link, port, close) {
+      RUNNING[dat.path] = close
+      dat.active = true
+      dat.date = Date.now()
+      config.dats[dat.path] = dat
+      writeConfig(config)
+      cb(null, dat)
+    }
+  }
 
   function restart (dat, cb) {
     stop(dat, function (err, dat) {
@@ -118,13 +137,11 @@ mb.on('ready', function ready () {
     function done (err, link, port, close) {
       if (err) return cb(err)
       RUNNING[dat.path] = close
-
       dat.link = link
       dat.active = true
       dat.date = Date.now()
       config.dats[dat.path] = dat
       writeConfig(config)
-
       cb(null, dat)
     }
   }
@@ -134,15 +151,14 @@ mb.on('ready', function ready () {
     var close = RUNNING[dat.path]
     if (close) close(done)
     else done()
+
     function done (err) {
       if (err) return cb(err)
       RUNNING[dat.path] = undefined
-
       dat.active = false
       console.log('closing', dat)
       config.dats[dat.path] = dat
       writeConfig(config)
-
       cb(null, dat)
     }
   }
