@@ -6,18 +6,18 @@
 <div id="notification" class="{{notify.type}}">
   <h1 class="message centered">{{notify.message}}</h1>
 </div>
-<div id="download" class="hidden">
-  <input type="text" value="{{link}}" placeholder="Paste link here..." />
-  <button type="submit" on-click="download">download</button>
-</div>
 <div id="content">
   <div class="sourcelist">
     {{#each dats}}
     <div class="toolbar row" on-click="open:{{path}}" on-contextmenu="actions:{{path}}">
       <div class="left">
-        {{#if this.active}}
+        {{#if this.state === 'active'}}
         <div class="indicator active" on-click="stop:{{path}}"></div>
-        {{else}}
+        {{/if}}
+        {{#if this.state === 'loading'}}
+        <div class="indicator">...</div>
+        {{/if}}
+        {{#if this.state === 'inactive'}}
         <div class="indicator inactive" on-click="share:{{path}}"></div>
         {{/if}}
       </div>
@@ -26,10 +26,21 @@
         <div class="date">{{relativeDate(this.date)}}</div>
       </div>
       <div class="buttons">
-        <button class="share-button" on-click="share:{{path}}">Share link</button>
+        {{#if this.state !== 'loading'}}
+          <button class="share-button" on-click="share:{{path}}">Share link</button>
+        {{/if}}
       </div>
     </div>
     {{/each}}
+  </div>
+</div>
+<div id="download">
+  <div class="input-box">
+    <input type="text" value="{{link}}" placeholder="Paste link here..." />
+    <button type="submit" on-click="download">Download</button>
+  </div>
+  <div class="x clickable" on-click="close:'#download'">
+    x
   </div>
 </div>
 <div class="footer bookend">

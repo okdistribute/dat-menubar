@@ -82,8 +82,6 @@ function loadConfig () {
 }
 
 mb.on('ready', function ready () {
-  configure()
-
   app.on('dats', function (req, cb) {
     var conf = loadConfig()
     cb(conf.dats)
@@ -112,8 +110,9 @@ mb.on('ready', function ready () {
     db.download(dat.link, done)
 
     function done (err, link, port, close) {
+      if (err) return cb(err)
       RUNNING[dat.path] = close
-      dat.active = true
+      dat.state = 'active'
       dat.date = Date.now()
       config.dats[dat.path] = dat
       writeConfig(config)
@@ -138,7 +137,7 @@ mb.on('ready', function ready () {
       if (err) return cb(err)
       RUNNING[dat.path] = close
       dat.link = link
-      dat.active = true
+      dat.state = 'active'
       dat.date = Date.now()
       config.dats[dat.path] = dat
       writeConfig(config)
@@ -155,25 +154,11 @@ mb.on('ready', function ready () {
     function done (err) {
       if (err) return cb(err)
       RUNNING[dat.path] = undefined
-      dat.active = false
+      dat.state = 'inactive'
       console.log('closing', dat)
       config.dats[dat.path] = dat
       writeConfig(config)
       cb(null, dat)
-    }
-  }
-
-  function configure () {
-    var conf = loadConfig()
-    var keys = Object.keys(conf.dats)
-    for (var i = 0; i < keys.length; i++) {
-      var dat = conf.dats[keys[i]]
-      if (dat.active) {
-        start(dat, function (err, dat) {
-          if (err) throw err
-          console.log('Started', dat.link)
-        })
-      }
     }
   }
 })

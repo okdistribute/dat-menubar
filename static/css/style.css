@@ -13,7 +13,7 @@ h2 { margin: 0px; padding: 0px; }
 
 button {
   background-color: white;
-  border: 1px solid #f0f0f0;
+  border: 1px solid #DCDCDC;
   /* font-size: 13px; */
   font-family: 'Lucida Grande', Helvetica, Arial;
   padding: 7px;
@@ -45,10 +45,20 @@ button {
   justify-content: space-between;
   position: fixed;
   width: 100%;
-  z-index: 0;
+  z-index: 10001;
   text-align: right;
-  background-color: rgb(239, 239, 239);
+  background-color: #FAFAFA;
   padding-bottom: 3px;
+}
+
+.x {
+  position: absolute;
+  right: 0px;
+  padding-right: 5px;
+  top: 0px;
+  color: #DCDCDC;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .row {
@@ -73,23 +83,66 @@ button {
   color: #5e5e5e;
 }
 
-.row:hover, .clickable:hover { cursor: pointer; background-color: rgba(168, 255, 172, 0.10) }
+button:hover, .row:hover, .clickable:hover  {
+  cursor: pointer;
+  background-color: rgba(168, 255, 172, 0.10);
+}
+input[type="text"]:focus { outline: 1px solid rgba(168, 255, 172, 0.10); }
 .row .share-button { display: none; }
 .row:hover .share-button { display: block; }
+
 #notification {
   position: absolute;
   background: rgba(0, 0, 0, 0);
 }
+
 #notification.success {
   display: block;
   color: #054E05;
   height: 100%;
   background: rgba(0, 0, 0, 0.10);
-  transition: display .5, background .5s;
+  transition: background .5s;
   z-index: 999;
   font-size: 48px;
   text-align: center;
   padding: 5px;
+}
+
+#download {
+  position: absolute;
+  bottom: -60px;
+  left: 0px;
+  right: 0px;
+  transition: bottom .5s;
+  -webkit-transition: bottom .5s;
+  background-color: white;
+  z-index: 9999;
+}
+
+#download.open {
+  bottom: 34px;
+  border-top: 1px solid #DCDCDC;
+}
+
+.input-box {
+  padding: 10px;
+  text-align: center;
+  z-index: 1000;
+}
+
+input[type="text"] {
+  font-size: 12px;
+  height: 40px;
+  width: 50%;
+  border-radius: 3px;
+  padding: 0px 10px;
+  border: 1px solid #DCDCDC;
+}
+
+button[type="submit"] {
+  height: 40px;
+  margin: 0px;
+  padding: 0px 20px;
 }
 
 .centered {

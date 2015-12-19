@@ -35,6 +35,15 @@ function render (dats) {
         }, 2000)
       }
 
+      var keys = Object.keys(dats)
+      for (var i = 0; i < keys.length; i++) {
+        var dat = dats[keys[i]]
+        if (dat.state === 'active') {
+          loading(dat)
+          share(dat, {copy: false})
+        }
+      }
+
       dragDrop(document.querySelector('#content'), function (files) {
         var file = files[0]
         var dat = Dat({path: file.path})
@@ -44,7 +53,7 @@ function render (dats) {
 
       self.on('stop', function (event, path) {
         client.request('stop', dats[path], function (err, dat) {
-          if (err) throw err
+          if (err) return onerror(err)
           dats[path] = dat
           self.set('dats', dats)
         })
@@ -53,24 +62,32 @@ function render (dats) {
       })
 
       self.on('share', function (event, path) {
-        share(dats[path])
+        share(dats[path], {copy: true})
         event.original.preventDefault()
         event.original.stopPropagation()
       })
 
-      function share (dat) {
+      function loading (dat) {
+        dat.state = 'loading'
+        dats[dat.path] = dat
+        self.set('dats', dats)
+      }
+
+      function share (dat, opts) {
+        loading(dat)
         client.request('share', dat, function (err, dat) {
-          if (err) return console.error(err)
-          dats[path] = dat
-          copy(dat)
+          if (err) return onerror(err)
+          dats[dat.path] = dat
+          if (opts.copy) copy(dat)
           self.set('dats', dats)
         })
       }
 
       function download (dat) {
+        loading(dat)
         client.request('download', dat, function (err, dat) {
-          if (err) return console.error(err)
-          dats[path] = dat
+          if (err) return onerror(err)
+          dats[dat.path] = dat
           self.set('dats', dats)
         })
       }
@@ -108,7 +125,7 @@ function render (dats) {
       var addMenu = new Menu()
       addMenu.append(new MenuItem({ label: 'Download from link', click: function () {
         var downloadBox = document.querySelector('#download')
-        downloadBox.classList.remove('hidden')
+        downloadBox.classList.add('open')
       }}))
       addMenu.append(new MenuItem({ label: 'Share...', click: addButton }))
 
@@ -122,9 +139,13 @@ function render (dats) {
         dialog.showOpenDialog(opts, function (directories) {
           if (!directories) return
           var dat = Dat({path: directories[0]})
-          share(dat)
+          share(dat, {copy: true})
         })
       }
+
+      self.on('close', function (event, selector) {
+        document.querySelector(selector).classList.remove('open')
+      })
 
       self.on('download', function (event) {
         event.original.preventDefault()
@@ -137,16 +158,17 @@ function render (dats) {
         dialog.showOpenDialog(dialogOpts, function (directories) {
           if (!directories) return
           var downloadBox = document.querySelector('#download')
-          downloadBox.classList.add('hidden')
+          downloadBox.classList.remove('open')
           var dat = Dat({link: link, path: directories[0]})
           download(dat)
+          self.set('link', '')
         })
       })
     }
   })
 }
 
-function throwError (error) {
+function onerror (error) {
   var message = error.stack || error.message || JSON.stringify(error)
   console.error(message)
   window.alert(message)
@@ -155,7 +177,7 @@ function throwError (error) {
 // Throw unhandled javascript errors
 window.onerror = function errorHandler (message, url, lineNumber) {
   message = message + '\n' + url + ':' + lineNumber
-  throwError(message)
+  onerror(message)
 }
 
 function Dat (data) {
@@ -163,7 +185,7 @@ function Dat (data) {
   return {
     name: data.name || path.basename(data.path),
     path: data.path,
-    active: data.active || true,
+    state: data.state || 'active',
     link: data.link || undefined,
     date: data.date || Date.now()
   }
