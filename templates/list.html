@@ -12,13 +12,13 @@
     <div class="toolbar row" on-click="open:{{path}}" on-contextmenu="actions:{{path}}">
       <div class="left">
         {{#if this.state === 'active'}}
-        <div class="indicator active" on-click="stop:{{path}}"></div>
+        <div class="indicator active"></div>
         {{/if}}
         {{#if this.state === 'loading'}}
         <div class="indicator">...</div>
         {{/if}}
         {{#if this.state === 'inactive'}}
-        <div class="indicator inactive" on-click="share:{{path}}"></div>
+        <div class="indicator inactive"></div>
         {{/if}}
       </div>
       <div class="content">

@@ -47,19 +47,20 @@ function render (dats) {
       dragDrop(document.querySelector('#content'), function (files) {
         var file = files[0]
         var dat = Dat({path: file.path})
-        dats[dat.path] = dat
-        self.set('dats', dats)
+        update(dat)
       })
 
-      self.on('stop', function (event, path) {
-        client.request('stop', dats[path], function (err, dat) {
+      function update (dat) {
+        dats[dat.path] = dat
+        self.set('dats', dats)
+      }
+
+      function stop (dat) {
+        client.request('stop', dat, function (err, dat) {
           if (err) return onerror(err)
-          dats[path] = dat
-          self.set('dats', dats)
+          update(dat)
         })
-        event.original.preventDefault()
-        event.original.stopPropagation()
-      })
+      }
 
       self.on('share', function (event, path) {
         share(dats[path], {copy: true})
@@ -69,17 +70,15 @@ function render (dats) {
 
       function loading (dat) {
         dat.state = 'loading'
-        dats[dat.path] = dat
-        self.set('dats', dats)
+        update(dat)
       }
 
       function share (dat, opts) {
         loading(dat)
         client.request('share', dat, function (err, dat) {
           if (err) return onerror(err)
-          dats[dat.path] = dat
           if (opts.copy) copy(dat)
-          self.set('dats', dats)
+          update(dat)
         })
       }
 
@@ -87,8 +86,7 @@ function render (dats) {
         loading(dat)
         client.request('download', dat, function (err, dat) {
           if (err) return onerror(err)
-          dats[dat.path] = dat
-          self.set('dats', dats)
+          update(dat)
         })
       }
 
@@ -102,15 +100,17 @@ function render (dats) {
         ipc.send('hide')
       })
 
-      var actionMenu = new Menu()
-      actionMenu.append(new MenuItem({ label: 'Copy link', click: function () {
-        var dat = dats[path]
-        copy(dat)
-      }}))
-
       self.on('actions', function (event, path) {
+        var actionMenu = new Menu()
+        var dat = dats[path]
+        console.log(dat)
+        if (dat.state === 'active') {
+          actionMenu.append(new MenuItem({ label: 'Stop sharing', click: function () {
+            stop(dat)
+          }}))
+          actionMenu.popup(electron.remote.getCurrentWindow())
+        }
         event.original.preventDefault()
-        actionMenu.popup(electron.remote.getCurrentWindow())
       })
 
       var settings = new Menu()

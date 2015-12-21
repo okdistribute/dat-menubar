@@ -178,8 +178,8 @@ button[type="submit"] {
   background-size: contain;
 }
 
-.indicator.active { background-image: url('../images/dat-data-pause.png'); }
-.indicator.inactive { background-image: url('../images/dat-data-play.png'); }
+.indicator.active { background-image: url('../images/dat-data-blank-small.png'); }
+.indicator.inactive { background-image: url('../images/dat-hex-small-brown.png'); }
 
 button { cursor: pointer; }
 .settings { height: 18px; padding: 8px 5px 3px; cursor: pointer; }
