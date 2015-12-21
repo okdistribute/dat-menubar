@@ -111,16 +111,18 @@ input[type="text"]:focus { outline: 1px solid rgba(168, 255, 172, 0.10); }
 #download {
   position: absolute;
   bottom: -60px;
+  display: none;
   left: 0px;
   right: 0px;
-  transition: bottom .5s;
-  -webkit-transition: bottom .5s;
+  transition: bottom 2s;
+  -webkit-transition: bottom 2s;
   background-color: white;
   z-index: 9999;
 }
 
 #download.open {
   bottom: 34px;
+  display: block;
   border-top: 1px solid #DCDCDC;
 }
 
