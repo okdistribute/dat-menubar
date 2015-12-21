@@ -15,7 +15,7 @@ var RUNNING = {}
 var mb = menubar({
   dir: __dirname,
   icon: path.join(__dirname, 'static', 'images', 'dat-icon.png'),
-  width: 280
+  width: 320
 })
 
 mb.on('ready', function ready () {
@@ -102,6 +102,16 @@ mb.on('ready', function ready () {
 
   app.on('stop', function task (req, cb) {
     stop(req.body, cb)
+  })
+
+  app.on('remove', function task (req, cb) {
+    var config = loadConfig()
+    stop(req.body, function (err, dat) {
+      if (err) return cb(err)
+      delete config.dats[dat.path]
+      writeConfig(config)
+      return cb(null, dat)
+    })
   })
 
   function download (dat, cb) {

@@ -62,6 +62,14 @@ function render (dats) {
         })
       }
 
+      function del (dat) {
+        client.request('remove', dat, function (err, dat) {
+          if (err) return onerror(err)
+          delete dats[dat.path]
+          self.set('dats', dats)
+        })
+      }
+
       self.on('share', function (event, path) {
         share(dats[path], {copy: true})
         event.original.preventDefault()
@@ -108,8 +116,11 @@ function render (dats) {
           actionMenu.append(new MenuItem({ label: 'Stop sharing', click: function () {
             stop(dat)
           }}))
-          actionMenu.popup(electron.remote.getCurrentWindow())
         }
+        actionMenu.append(new MenuItem({ label: 'Remove from list', click: function () {
+          del(dat)
+        }}))
+        actionMenu.popup(electron.remote.getCurrentWindow())
         event.original.preventDefault()
       })
 
