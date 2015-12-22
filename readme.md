@@ -4,7 +4,7 @@ This is a cross-platform desktop application for [dat](http://dat-data.com). PRs
 
 Sharing a folder gives you a link. Give that link to someone else so they can download the data. Your data will be available as long as the app is running, traveling through no centralized servers. If the app is closed, the data will no longer be served.
 
-![open](images/download.png)
+![open](images/open.png)
 
 ## TODO
 
