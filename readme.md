@@ -1,14 +1,23 @@
 # Desktop Application for `dat`
 
-Version and sync data over peer to peer network.  Simply click to share a folder and you are given a static link. Someone else can use that link to download the data, directly onto their machine. Your data travels through no centralized servers.
+This is a cross-platform desktop application for [dat](http://dat-data.com). PRs welcome.
+
+Sharing a folder gives you a link. Give that link to someone else so they can download the data. Your data will be available as long as the app is running, traveling through no centralized servers. If the app is closed, the data will no longer be served.
 
 ![open](images/open.png)
 
+## TODO
+
+- [ ] Create distribution tarball/.app
+- [ ] See info on each dat (e.g., number of peers)
+- [ ] Write to a debug log which can be viewed from 'debug' option in settings
+- [ ] Prompt to start downloading when the user clicks a link starting with `dat://`
+
 ## Developer Install
 
-It is currently in development, and not production ready. Here's how you can get it installed locally to test it out.
+This app under active development and not production ready. If you want to test it out, you can get it set up locally.
 
-### have dat 1.0
+### Have dat 1.0
 
 Make sure you install and link dat's 1.0 branch:
 
@@ -30,7 +39,3 @@ node_modules $ cd dat-app
 dat-app $ npm install
 dat-app $ npm start
 ```
-
-## About
-
-This is a cross-platform desktop application for [dat](http://github.com/maxogden/dat).
