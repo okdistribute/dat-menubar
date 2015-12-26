@@ -93,19 +93,22 @@ input[type="text"]:focus { outline: 1px solid rgba(168, 255, 172, 0.10); }
 
 #notification {
   position: absolute;
-  background: rgba(0, 0, 0, 0);
+  top: -30;
+  height: 30px;
 }
 
 #notification.success {
   display: block;
-  color: #054E05;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.10);
-  transition: background .5s;
+  color: white;
+  top: 0;
+  width: 100%;
+  background-color: green;
+  border-bottom: 1px solid #DCDCDC;
+  transition: top .5s;
   z-index: 999;
-  font-size: 48px;
+  line-height: 30px;
+  font-size: 18px;
   text-align: center;
-  padding: 5px;
 }
 
 #download {

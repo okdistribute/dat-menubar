@@ -141,7 +141,10 @@ mb.on('ready', function ready () {
     if (RUNNING[dat.path]) return restart(dat, cb)
     var config = loadConfig()
     var db = Dat(dat.path)
-    db.share(done)
+    db.addDirectory(function (err, link) {
+      if (err) return cb(err)
+      db.joinTcpSwarm(link, done)
+    })
 
     function done (err, link, port, close) {
       if (err) return cb(err)

@@ -4,7 +4,7 @@
 </div>
 -->
 <div id="notification" class="{{notify.type}}">
-  <h1 class="message centered">{{notify.message}}</h1>
+  <h1 class="message">{{notify.message}}</h1>
 </div>
 <div id="content">
   <div class="sourcelist">
@@ -28,7 +28,9 @@
       </div>
       <div class="buttons">
         {{#if this.state !== 'loading'}}
-          <button class="share-button" on-click="share:{{path}}">Share link</button>
+          <button class="share-button" on-click="share:{{path}}">
+              Share link
+          </button>
         {{/if}}
       </div>
     </div>

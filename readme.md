@@ -19,15 +19,13 @@ This app under active development and not production ready. If you want to test 
 
 ### Have dat 1.0
 
-Make sure you install and link dat's 1.0 branch:
+Make sure you install and link dat 1.0 :
 
 ```
 dev $ mkdir node_modules
 dev $ cd node_modules
 node_modules $ git clone http://github.com/maxogden/dat
 node_modules $ cd dat
-dat $ git fetch
-dat $ git checkout 1.0
 dat $ npm link
 ```
 
