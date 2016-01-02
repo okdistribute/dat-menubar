@@ -29,5 +29,8 @@
     "ractive-toolkit": "^1.1.0",
     "register-multicast-dns": "^1.1.0",
     "watchify": "^3.6.1"
+  },
+  "devDependencies": {
+    "electron-packager": "^5.2.0"
   }
 }
