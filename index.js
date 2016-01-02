@@ -2,10 +2,10 @@ var path = require('path')
 var dragDrop = require('drag-and-drop-files')
 var shell = require('shell')
 var electron = require('electron')
-var ipc = require('ipc')
 var fs = require('fs')
 var Ractive = require('ractive-toolkit')
 
+var ipc = electron.ipcRenderer
 var dialog = electron.remote.dialog
 var Menu = electron.remote.Menu
 var MenuItem = electron.remote.MenuItem
@@ -108,6 +108,10 @@ function render (dats) {
         ipc.send('hide')
       })
 
+      ipc.on('open-dat', function (event, link) {
+        downloadButton(link)
+      })
+
       self.on('actions', function (event, path) {
         var actionMenu = new Menu()
         var dat = dats[path]
@@ -161,6 +165,10 @@ function render (dats) {
       self.on('download', function (event) {
         event.original.preventDefault()
         var link = self.get('link')
+        downloadButton(link)
+      })
+
+      function downloadButton (link) {
         if (!link) return
         var dialogOpts = {
           title: 'Download location.',
@@ -174,7 +182,7 @@ function render (dats) {
           download(dat)
           self.set('link', '')
         })
-      })
+      }
     }
   })
 }

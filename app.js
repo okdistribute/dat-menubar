@@ -1,10 +1,10 @@
 var menubar = require('menubar')
-var ipc = require('electron').ipcMain
 var fs = require('fs')
 var mkdirp = require('mkdirp')
 var debug = require('debug')('dat-app')
 var Dat = require('dat')
 var path = require('path')
+var ipc = require('ipc')
 var electron = require('electron')
 var homedir = require('os-homedir')()
 
@@ -13,14 +13,13 @@ mkdirp.sync(datPath)
 var configFile = path.join(datPath, 'config.json')
 var RUNNING = {}
 
-var win
-var link = '8af17091c64cebdfb58c6fa6a9859a4b8663a70991c279f398552a2e7a03109a'
+var link
 var ready = false
 
 var mb = menubar({
   dir: __dirname,
   icon: path.join(__dirname, 'static', 'images', 'dat-icon.png'),
-  width: 320
+  width: 380
 })
 
 process.on('uncaughtException', function (err) {
@@ -30,6 +29,10 @@ process.on('uncaughtException', function (err) {
 
 mb.on('show', function show () {
   app.configure(mb.window.webContents)
+  mb.window.webContents.on('did-finish-load', function () {
+    ready = true
+    if (link) mb.window.webContents.send('open-dat', link)
+  })
   app.send('show')
 })
 
@@ -40,6 +43,18 @@ ipc.on('quit', function terminate (ev) {
 ipc.on('hide', function hide (ev) {
   mb.hideWindow()
 })
+
+var onopen = function (e, lnk) {
+  e.preventDefault()
+  if (ready) {
+    mb.window.webContents.send('open-dat', link)
+    return
+  }
+  link = lnk
+}
+
+ipc.on('open-file', onopen)
+ipc.on('open-url', onopen)
 
 var Server = require('electron-rpc/server')
 var app = new Server()
@@ -82,7 +97,7 @@ function loadConfig () {
   return conf
 }
 
-mb.on('ready', function ready () {
+mb.on('ready', function () {
   app.on('dats', function (req, cb) {
     var conf = loadConfig()
     cb(conf.dats)
