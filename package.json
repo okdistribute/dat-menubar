@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/karissa/dat-app#readme",
   "dependencies": {
+    "debug": "^2.2.0",
     "drag-and-drop-files": "0.0.1",
     "drag-drop": "^2.3.1",
     "electron-prebuilt": "^0.35.4",

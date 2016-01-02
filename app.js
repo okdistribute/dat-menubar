@@ -2,6 +2,7 @@ var menubar = require('menubar')
 var ipc = require('electron').ipcMain
 var fs = require('fs')
 var mkdirp = require('mkdirp')
+var debug = require('debug')('dat-app')
 var Dat = require('dat')
 var path = require('path')
 var electron = require('electron')
@@ -12,14 +13,14 @@ mkdirp.sync(datPath)
 var configFile = path.join(datPath, 'config.json')
 var RUNNING = {}
 
+var win
+var link = '8af17091c64cebdfb58c6fa6a9859a4b8663a70991c279f398552a2e7a03109a'
+var ready = false
+
 var mb = menubar({
   dir: __dirname,
   icon: path.join(__dirname, 'static', 'images', 'dat-icon.png'),
   width: 320
-})
-
-mb.on('ready', function ready () {
-  console.log('ready')
 })
 
 process.on('uncaughtException', function (err) {
@@ -117,9 +118,11 @@ mb.on('ready', function ready () {
   function download (dat, cb) {
     var config = loadConfig()
     var db = Dat(dat.path)
+    debug('downloading', dat)
     db.download(dat.link, done)
 
     function done (err, link, port, close) {
+      debug('done', arguments)
       if (err) return cb(err)
       RUNNING[dat.path] = close
       dat.state = 'active'
@@ -131,7 +134,9 @@ mb.on('ready', function ready () {
   }
 
   function restart (dat, cb) {
+    debug('restarting', dat)
     stop(dat, function (err, dat) {
+      debug('done', arguments)
       if (err) throw err
       start(dat, cb)
     })
@@ -141,12 +146,14 @@ mb.on('ready', function ready () {
     if (RUNNING[dat.path]) return restart(dat, cb)
     var config = loadConfig()
     var db = Dat(dat.path)
+    debug('starting', dat)
     db.addDirectory(function (err, link) {
       if (err) return cb(err)
       db.joinTcpSwarm(link, done)
     })
 
     function done (err, link, port, close) {
+      debug('done', arguments)
       if (err) return cb(err)
       RUNNING[dat.path] = close
       dat.link = link
@@ -161,10 +168,12 @@ mb.on('ready', function ready () {
   function stop (dat, cb) {
     var config = loadConfig()
     var close = RUNNING[dat.path]
+    debug('stopping', dat)
     if (close) close(done)
     else done()
 
     function done (err) {
+      debug('done', err)
       if (err) return cb(err)
       RUNNING[dat.path] = undefined
       dat.state = 'inactive'
