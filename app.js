@@ -4,7 +4,7 @@ var fs = require('fs')
 var mkdirp = require('mkdirp')
 var Dat = require('dat')
 var path = require('path')
-var dialog = require('electron').dialog
+var electron = require('electron')
 var homedir = require('os-homedir')()
 
 var datPath = path.join(homedir, '.dat')
@@ -23,7 +23,7 @@ mb.on('ready', function ready () {
 })
 
 process.on('uncaughtException', function (err) {
-  dialog.showErrorBox('Uncaught Exception: ' + err.message, err.stack || '')
+  electron.dialog.showErrorBox('Uncaught Exception: ' + err.message, err.stack || '')
   mb.app.quit()
 })
 
@@ -65,7 +65,7 @@ function loadConfig () {
   try {
     conf = JSON.parse(data.toString())
   } catch (e) {
-    var code = dialog.showMessageBox({
+    var code = electron.dialog.showMessageBox({
       message: 'Invalid configuration file\nCould not parse JSON',
       detail: e.stack,
       buttons: ['Reload Config', 'Exit app']
