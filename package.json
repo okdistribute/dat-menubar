@@ -23,15 +23,13 @@
     "debug": "^2.2.0",
     "drag-and-drop-files": "0.0.1",
     "drag-drop": "^2.3.1",
+    "electron-packager": "^5.2.0",
+    "electron-prebuilt": "^0.36.2",
     "electron-rpc": "^1.0.3",
     "menubar": "^2.3.0",
     "mkdirp": "^0.5.1",
     "ractive-toolkit": "^1.1.0",
     "register-multicast-dns": "^1.1.0",
     "watchify": "^3.6.1"
-  },
-  "devDependencies": {
-    "electron-prebuilt": "^0.36.2",
-    "electron-packager": "^5.2.0"
   }
 }
