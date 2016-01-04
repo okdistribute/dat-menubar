@@ -30,8 +30,8 @@ process.on('uncaughtException', function (err) {
 mb.on('show', function show () {
   app.configure(mb.window.webContents)
   mb.window.webContents.on('did-finish-load', function () {
-    ready = true
     if (link) mb.window.webContents.send('open-dat', link)
+    link = false
   })
   app.send('show')
 })
@@ -46,11 +46,8 @@ ipc.on('hide', function hide (ev) {
 
 var onopen = function (e, lnk) {
   e.preventDefault()
-  if (ready) {
-    mb.window.webContents.send('open-dat', link)
-    return
-  }
   link = lnk
+  mb.showWindow()
 }
 
 ipc.on('open-file', onopen)
