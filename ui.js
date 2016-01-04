@@ -107,7 +107,7 @@ function render (dats) {
         shell.openItem(path)
         ipc.send('hide')
       })
-
+      
       ipc.on('open-dat', function (event, link) {
         downloadButton(link)
       })
