@@ -22,7 +22,6 @@
     "dat": "git+https://github.com/maxogden/dat.git",
     "debug": "^2.2.0",
     "drag-and-drop-files": "0.0.1",
-    "drag-drop": "^2.3.1",
     "electron-packager": "^5.2.0",
     "electron-prebuilt": "^0.35.5",
     "electron-rpc": "^1.0.3",
@@ -31,7 +30,6 @@
     "os-homedir": "^1.0.1",
     "ractive-toolkit": "^1.1.0",
     "register-multicast-dns": "^1.1.0",
-    "run-parallel": "^1.1.4",
-    "watchify": "^3.6.1"
+    "run-parallel": "^1.1.4"
   }
 }
