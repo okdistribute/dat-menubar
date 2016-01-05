@@ -14,7 +14,6 @@ var configFile = path.join(datPath, 'config.json')
 var RUNNING = {}
 
 var link
-var ready = false
 
 var mb = menubar({
   dir: __dirname,
@@ -129,9 +128,9 @@ mb.on('ready', function () {
 
   function download (dat, cb) {
     var config = loadConfig()
-    var db = Dat(dat.path)
+    var db = Dat()
     debug('downloading', dat)
-    db.download(dat.link, done)
+    db.download(dat.link, dat.path, done)
 
     function done (err, link, port, close) {
       debug('done', arguments)
@@ -159,7 +158,7 @@ mb.on('ready', function () {
     var config = loadConfig()
     var db = Dat(dat.path)
     debug('starting', dat)
-    db.addDirectory(function (err, link) {
+    db.add(dat.path, function (err, link) {
       if (err) return cb(err)
       db.joinTcpSwarm(link, done)
     })

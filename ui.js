@@ -4,11 +4,12 @@ var shell = require('shell')
 var electron = require('electron')
 var fs = require('fs')
 var Ractive = require('ractive-toolkit')
+var remote = require('remote')
 
 var ipc = electron.ipcRenderer
-var dialog = electron.remote.dialog
-var Menu = electron.remote.Menu
-var MenuItem = electron.remote.MenuItem
+var dialog = remote.dialog
+var Menu = remote.Menu
+var MenuItem = remote.MenuItem
 
 var Client = require('electron-rpc/client')
 var client = new Client()
@@ -107,7 +108,7 @@ function render (dats) {
         shell.openItem(path)
         ipc.send('hide')
       })
-      
+
       ipc.on('open-dat', function (event, link) {
         downloadButton(link)
       })

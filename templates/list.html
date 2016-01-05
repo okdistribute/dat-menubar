@@ -22,9 +22,8 @@
         {{/if}}
       </div>
       <div class="content">
-        <span class="name">{{this.name}}</span>
-        <div class="date">{{this.path}}</div>
-        <!--<div class="date">{{relativeDate(this.date)}}</div>-->
+        <span class="name">{{this.path}}</span>
+        <div class="date">{{relativeDate(this.date)}}</div>
       </div>
       <div class="buttons">
         {{#if this.state !== 'loading'}}
