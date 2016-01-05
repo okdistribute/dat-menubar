@@ -28,6 +28,7 @@
     "electron-rpc": "^1.0.3",
     "menubar": "^2.3.0",
     "mkdirp": "^0.5.1",
+    "os-homedir": "^1.0.1",
     "ractive-toolkit": "^1.1.0",
     "register-multicast-dns": "^1.1.0",
     "run-parallel": "^1.1.4",
