@@ -147,7 +147,8 @@ function start (dat, cb) {
   config.update(dat)
   debug('starting', dat)
   var db = Dat()
-  db.add(dat.path, function (err, link) {
+  if (dat.link) return db.download(dat.link, dat.path, done)
+  dat.add(dat.path, function (err, link) {
     if (err) return cb(err)
     db.joinTcpSwarm(link, done)
   })
