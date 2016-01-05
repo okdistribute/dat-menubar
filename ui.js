@@ -29,20 +29,23 @@ function render (dats) {
     onrender: function () {
       var self = this
 
+      ipc.on('update', function (event, dats) {
+        self.set('dats', dats)
+      })
+
+      ipc.on('open-dat', function (event, link) {
+        downloadButton(link)
+      })
+
+      ipc.on('error', function (event, message) {
+        notify('error', message)
+      })
+
       function notify (type, message) {
         self.set('notify', {type: type, message: message})
         setTimeout(function () {
           self.set('notify', {type: '', message: ''})
         }, 2000)
-      }
-
-      var keys = Object.keys(dats)
-      for (var i = 0; i < keys.length; i++) {
-        var dat = dats[keys[i]]
-        if (dat.state === 'active') {
-          loading(dat)
-          share(dat, {copy: false})
-        }
       }
 
       dragDrop(document.querySelector('#content'), function (files) {
@@ -109,15 +112,11 @@ function render (dats) {
         ipc.send('hide')
       })
 
-      ipc.on('open-dat', function (event, link) {
-        downloadButton(link)
-      })
-
       self.on('actions', function (event, path) {
         var actionMenu = new Menu()
         var dat = dats[path]
         console.log(dat)
-        if (dat.state === 'active') {
+        if (dat.state !== 'inactive') {
           actionMenu.append(new MenuItem({ label: 'Stop sharing', click: function () {
             stop(dat)
           }}))

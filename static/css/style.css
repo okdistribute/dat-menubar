@@ -97,6 +97,10 @@ input[type="text"]:focus { outline: 1px solid rgba(168, 255, 172, 0.10); }
   height: 30px;
 }
 
+#notification.error {
+  background-color: red;
+}
+
 #notification.success {
   display: block;
   color: white;
