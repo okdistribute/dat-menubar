@@ -59,5 +59,6 @@ Config.prototype.read = function () {
 }
 
 Config.prototype.write = function () {
-  fs.writeFileSync(this.loc, JSON.stringify({dats: this.dats}, null, 2))
+  var self = this
+  fs.writeFileSync(self.loc, JSON.stringify({dats: self.dats}, null, 2))
 }

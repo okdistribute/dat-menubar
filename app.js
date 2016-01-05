@@ -45,20 +45,19 @@ ipc.on('hide', function hide (ev) {
   mb.hideWindow()
 })
 
-var onopen = function (e, lnk) {
-  e.preventDefault()
+var onopen = function (lnk) {
   link = lnk
-  mb.showWindow()
 }
 
-ipc.on('open-file', onopen)
-ipc.on('open-url', onopen)
+mb.app.on('open-file', onopen)
+mb.app.on('open-url', onopen)
 
 var Server = require('electron-rpc/server')
 var app = new Server()
 
 mb.on('ready', function () {
   loadDats()
+  if (link) mb.showWindow()
 
   app.on('dats', function (req, cb) {
     config.read()
@@ -148,7 +147,7 @@ function start (dat, cb) {
   debug('starting', dat)
   var db = Dat()
   if (dat.link) return db.download(dat.link, dat.path, done)
-  dat.add(dat.path, function (err, link) {
+  db.add(dat.path, function (err, link) {
     if (err) return cb(err)
     db.joinTcpSwarm(link, done)
   })
