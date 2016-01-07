@@ -66,8 +66,7 @@ mb.on('ready', function () {
 
   app.on('get-one', function (req, cb) {
     config.read()
-    var dat = config.get(req.body.path)
-    cb(dat)
+    cb(config.get(req.body.path))
   })
 
   app.on('download', function task (req, cb) {
@@ -126,9 +125,8 @@ function download (dat, cb) {
     RUNNING[dat.path] = close
     dat.state = 'active'
     dat.date = Date.now()
-    config.update(dat, function () {
-      cb(null, dat)
-    })
+    config.update(dat)
+    if (cb) cb(null, dat)
   }
 }
 
@@ -161,9 +159,8 @@ function start (dat, cb) {
     dat.link = link
     dat.state = 'active'
     dat.date = Date.now()
-    config.update(dat, function () {
-      cb(null, dat)
-    })
+    config.update(dat)
+    if (cb) cb(null, dat)
   }
 }
 
@@ -179,8 +176,7 @@ function stop (dat, cb) {
     if (err) return cb(err)
     RUNNING[dat.path] = undefined
     dat.state = 'inactive'
-    config.update(dat, function () {
-      cb(null, dat)
-    })
+    config.update(dat)
+    if (cb) cb(null, dat)
   }
 }

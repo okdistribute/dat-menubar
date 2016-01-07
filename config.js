@@ -1,26 +1,27 @@
 var fs = require('fs')
 var electron = require('electron')
+var path = require('path')
 
 module.exports = Config
 
 function Config (loc) {
   if (!(this instanceof Config)) return new Config(loc)
   this.loc = loc
-  this.dats = {}
+  this.dats = []
 }
 
-Config.prototype.update = function (dat, cb) {
+Config.prototype.update = function (dat) {
   this.dats[dat.path] = dat
-  this.write(cb)
+  this.write()
 }
 
 Config.prototype.get = function (key) {
   return this.dats[key]
 }
 
-Config.prototype.del = function (key, cb) {
+Config.prototype.del = function (key) {
   delete this.dats[key]
-  this.write(cb)
+  this.write()
 }
 
 Config.prototype.read = function () {
@@ -30,7 +31,8 @@ Config.prototype.read = function () {
     data = fs.readFileSync(self.loc)
   } catch (e) {
     if (e.code === 'ENOENT') {
-      self.write()
+      var defaultConfig = fs.readFileSync(path.join(__dirname, 'config.json')).toString()
+      self.write(defaultConfig)
       return self.read()
     } else {
       throw e
@@ -53,12 +55,10 @@ Config.prototype.read = function () {
   }
 
   self.dats = conf.dats
-  console.log('config', self.dats)
-  return conf.dats
+  return conf
 }
 
-Config.prototype.write = function (cb) {
+Config.prototype.write = function () {
   var self = this
-  var data = JSON.stringify({dats: self.dats}, null, 2)
-  fs.writeFile(self.loc, data, cb)
+  fs.writeFileSync(self.loc, JSON.stringify({dats: self.dats}, null, 2))
 }
