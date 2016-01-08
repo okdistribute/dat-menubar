@@ -7,7 +7,7 @@ module.exports = Config
 function Config (loc) {
   if (!(this instanceof Config)) return new Config(loc)
   this.loc = loc
-  this.dats = []
+  this.dats = {}
 }
 
 Config.prototype.update = function (dat) {
@@ -31,8 +31,7 @@ Config.prototype.read = function () {
     data = fs.readFileSync(self.loc)
   } catch (e) {
     if (e.code === 'ENOENT') {
-      var defaultConfig = fs.readFileSync(path.join(__dirname, 'config.json')).toString()
-      self.write(defaultConfig)
+      self.write()
       return self.read()
     } else {
       throw e
