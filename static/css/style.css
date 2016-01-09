@@ -159,10 +159,9 @@ button[type="submit"] {
 }
 
 .row img {
-  width: 24px;
+  width: 22px;
   line-height: 40px;
   vertical-align: middle;
-  padding-top: 7px;
   padding-right: 5px;
 }
 
