@@ -17,19 +17,7 @@ Sharing a folder gives you a link. Give that link to someone else so they can do
 
 This app under active development and not production ready. If you want to test it out, you can get it set up locally.
 
-### Have dat 1.0
-
-Make sure you install and link dat 1.0 :
-
-```
-dev $ mkdir node_modules
-dev $ cd node_modules
-node_modules $ git clone http://github.com/maxogden/dat
-node_modules $ cd dat
-dat $ npm link
-```
-
-Then install dat-app:
+Easy to install and run:
 
 ```
 node_modules $  git clone http://github.com/karissa/dat-app
