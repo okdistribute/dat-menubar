@@ -8,10 +8,13 @@ Sharing a folder gives you a link. Give that link to someone else so they can do
 
 ## TODO
 
-- [ ] Create distribution tarball/.app
+- [x] Create distribution tarball/.app
+- [ ] tests
+- [ ] windows 
+- [ ] drag and drop to dat menu bar icon
 - [ ] See info on each dat (e.g., number of peers)
 - [ ] Write to a debug log which can be viewed from 'debug' option in settings
-- [ ] Prompt to start downloading when the user clicks a link starting with `dat://`
+- [x] Prompt to start downloading when the user clicks a link starting with `dat://`
 
 ## Developer Install
 
