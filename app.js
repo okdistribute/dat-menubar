@@ -99,9 +99,15 @@ function loadDats () {
   for (var i = 0; i < keys.length; i++) {
     var dat = config.get(keys[i])
     if (dat.state !== 'inactive') {
-      tasks.push(function (cb) {
-        start(dat, cb)
-      })
+      function startdat (dat) {
+        return function (cb) {
+          start(dat, function (err, dat) {
+            if (err) return cb(err)
+            if (mb.window) mb.window.webContents.send('update', config.dats)
+          })
+        }
+      }
+      tasks.push(startdat(dat))
     }
   }
 
@@ -109,7 +115,6 @@ function loadDats () {
     if (!mb.window) return
     if (err) mb.window.webContents.send('error', err.message)
     config.read()
-    mb.window.webContents.send('update', config.dats)
   })
 }
 
