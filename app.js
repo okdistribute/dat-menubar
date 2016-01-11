@@ -15,7 +15,7 @@ var config = require('./config.js')(configFile)
 
 var RUNNING = {}
 
-var link
+var link, files
 
 var mb = menubar({
   dir: __dirname,
@@ -31,8 +31,10 @@ process.on('uncaughtException', function (err) {
 mb.on('show', function show () {
   app.configure(mb.window.webContents)
   mb.window.webContents.on('did-finish-load', function () {
-    if (link) mb.window.webContents.send('open-dat', link)
+    if (link) mb.window.webContents.send('download', link)
+    if (files) mb.window.webContents.send('share', files)
     link = false
+    files = false
   })
   app.send('show')
 })
@@ -56,6 +58,11 @@ var Server = require('electron-rpc/server')
 var app = new Server()
 
 mb.on('ready', function () {
+  mb.tray.on('drop-files', function (event, files) {
+    if (mb.window) mb.window.webContents.send('share', files)
+    else files = files
+  })
+
   loadDats()
   if (link) mb.showWindow()
 

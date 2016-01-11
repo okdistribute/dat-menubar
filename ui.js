@@ -33,7 +33,12 @@ function render (dats) {
         self.set('dats', dats)
       })
 
-      ipc.on('open-dat', function (event, link) {
+      ipc.on('share', function (event, path) {
+        var dat = Dat({path: path})
+        share(dat, {copy: true})
+      })
+
+      ipc.on('download', function (event, link) {
         downloadButton(link)
       })
 

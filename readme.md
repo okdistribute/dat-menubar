@@ -12,7 +12,7 @@ Sharing a folder gives you a link. Give that link to someone else. They put the 
 - [ ] tests
 - [ ] windows
 - [ ] See info on each dat (e.g., number of peers)
-- [ ] drag and drop to dat menu bar icon
+- [x] drag and drop to dat menu bar icon
 - [x] Prompt to start downloading when the user clicks a link starting with `dat://`
 
 ## Developer Install
