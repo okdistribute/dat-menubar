@@ -129,7 +129,7 @@ function render (dats) {
       })
 
       var settings = new Menu()
-      settings.append(new MenuItem({ label: 'Debug' }))
+      // settings.append(new MenuItem({ label: 'Debug' }))
       settings.append(new MenuItem({ label: 'Stop sharing and quit', click: function () { ipc.send('quit') } }))
 
       self.on('settings', function (event) {

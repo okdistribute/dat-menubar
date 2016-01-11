@@ -2,7 +2,7 @@
 
 This is a cross-platform desktop application for [dat](http://dat-data.com). PRs welcome.
 
-Sharing a folder gives you a link. Give that link to someone else so they can download the data. Your data will be available as long as the app is running, traveling through no centralized servers. If the app is closed, the data will no longer be served.
+Sharing a folder gives you a link. Give that link to someone else. They put the link in the app to download the data. The two apps find each other, and the data goes peer to peer, traveling through no centralized servers. The data will be available as long as at least one peer is seeding it.
 
 ![open](images/open.png)
 
@@ -10,10 +10,9 @@ Sharing a folder gives you a link. Give that link to someone else so they can do
 
 - [x] Create distribution tarball/.app
 - [ ] tests
-- [ ] windows 
-- [ ] drag and drop to dat menu bar icon
+- [ ] windows
 - [ ] See info on each dat (e.g., number of peers)
-- [ ] Write to a debug log which can be viewed from 'debug' option in settings
+- [ ] drag and drop to dat menu bar icon
 - [x] Prompt to start downloading when the user clicks a link starting with `dat://`
 
 ## Developer Install
