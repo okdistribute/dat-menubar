@@ -7,11 +7,13 @@ var parallel = require('run-parallel')
 var ipc = require('ipc')
 var electron = require('electron')
 var homedir = require('os-homedir')()
+var notifier = require('node-notifier')
 
 var datPath = path.join(homedir, '.dat')
 mkdirp.sync(datPath)
 var configFile = path.join(datPath, 'config.json')
 var config = require('./config.js')(configFile)
+var datIcon = path.join(__dirname, 'static', 'images', 'dat-icon.png')
 
 var RUNNING = {}
 
@@ -19,7 +21,7 @@ var link, dir
 
 var mb = menubar({
   dir: __dirname,
-  icon: path.join(__dirname, 'static', 'images', 'dat-icon.png'),
+  icon: datIcon,
   width: 380
 })
 
@@ -58,9 +60,7 @@ var Server = require('electron-rpc/server')
 var app = new Server()
 
 mb.on('ready', function () {
-  console.log('ready')
-  mb.tray.on('drop-dir', function (event, paths) {
-    console.log('got', paths)
+  mb.tray.on('drop-files', function (event, paths) {
     if (mb.window) mb.window.webContents.send('share', paths[0])
     else dir = paths[0]
   })
@@ -76,6 +76,11 @@ mb.on('ready', function () {
   app.on('get-one', function (req, cb) {
     config.read()
     cb(config.get(req.body.path))
+  })
+
+  app.on('notify', function (req) {
+    req.body.icon = datIcon
+    notifier.notify(req.body)
   })
 
   app.on('download', function task (req, cb) {
@@ -156,7 +161,7 @@ function start (dat, cb) {
   debug('starting', dat)
   var db = Dat()
   if (dat.link) return db.download(dat.link, dat.path, done)
-  db.add(dat.path, function (err, link) {
+  db.addFiles(dat.path, function (err, link) {
     if (err) return cb(err)
     db.joinTcpSwarm(link, done)
   })

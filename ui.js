@@ -43,15 +43,8 @@ function render (dats) {
       })
 
       ipc.on('error', function (event, message) {
-        notify('error', message)
+        alert(message)
       })
-
-      function notify (type, message) {
-        self.set('notify', {type: type, message: message})
-        setTimeout(function () {
-          self.set('notify', {type: '', message: ''})
-        }, 2000)
-      }
 
       dragDrop(document.querySelector('#content'), function (files) {
         var file = files[0]
@@ -109,7 +102,11 @@ function render (dats) {
 
       function copy (dat) {
         electron.clipboard.writeText(dat.link)
-        notify('success', 'Link copied')
+        var message = {
+          title: 'Link copied!',
+          message: dat.link
+        }
+        client.request('notify', message)
       }
 
       self.on('open', function (event, path) {
