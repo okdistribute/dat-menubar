@@ -15,7 +15,7 @@ var config = require('./config.js')(configFile)
 
 var RUNNING = {}
 
-var link, files
+var link, dir
 
 var mb = menubar({
   dir: __dirname,
@@ -32,9 +32,9 @@ mb.on('show', function show () {
   app.configure(mb.window.webContents)
   mb.window.webContents.on('did-finish-load', function () {
     if (link) mb.window.webContents.send('download', link)
-    if (files) mb.window.webContents.send('share', files)
+    if (dir) mb.window.webContents.send('share', dir)
     link = false
-    files = false
+    dir = false
   })
   app.send('show')
 })
@@ -58,9 +58,11 @@ var Server = require('electron-rpc/server')
 var app = new Server()
 
 mb.on('ready', function () {
-  mb.tray.on('drop-files', function (event, files) {
-    if (mb.window) mb.window.webContents.send('share', files)
-    else files = files
+  console.log('ready')
+  mb.tray.on('drop-dir', function (event, paths) {
+    console.log('got', paths)
+    if (mb.window) mb.window.webContents.send('share', paths[0])
+    else dir = paths[0]
   })
 
   loadDats()
