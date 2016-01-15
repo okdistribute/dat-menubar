@@ -14,17 +14,18 @@ var MenuItem = remote.MenuItem
 var Client = require('electron-rpc/client')
 var client = new Client()
 
+var dat = require('./dat.js')
+
 client.request('dats', function (dats) {
-  console.log(dats)
   render(dats)
 })
 
-var IMG_PATH = path.join(__dirname, 'static', 'images')
+var IMG_PATH = path.join(__dirname, 'images')
 
 function render (dats) {
   Ractive({
     el: '#container',
-    template: fs.readFileSync(path.join(__dirname, './templates/list.html')).toString(),
+    template: fs.readFileSync(path.join(__dirname, 'templates', 'list.html')).toString(),
     data: {dats: dats, IMG_PATH: IMG_PATH},
     onrender: function () {
       var self = this
@@ -48,7 +49,7 @@ function render (dats) {
 
       dragDrop(document.querySelector('#content'), function (files) {
         var file = files[0]
-        var dat = Dat({path: file.path})
+        var db = Dat(dat, {path: file.path})
         update(dat)
       })
 
@@ -199,15 +200,4 @@ function onerror (error) {
 window.onerror = function errorHandler (message, url, lineNumber) {
   message = message + '\n' + url + ':' + lineNumber
   onerror(message)
-}
-
-function Dat (data) {
-  if (!data.path) throw new Error('Path required.')
-  return {
-    name: data.name || path.basename(data.path),
-    path: data.path,
-    state: data.state || 'active',
-    link: data.link || undefined,
-    date: data.date || Date.now() // TODO: grab most recent mtime from the files
-  }
 }
