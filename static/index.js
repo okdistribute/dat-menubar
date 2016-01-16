@@ -49,7 +49,7 @@ function render (dats) {
 
       dragDrop(document.querySelector('#content'), function (files) {
         var file = files[0]
-        var db = Dat(dat, {path: file.path})
+        var dat = Dat(dat, {path: file.path})
         update(dat)
       })
 

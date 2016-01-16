@@ -82,7 +82,7 @@ mb.on('ready', function () {
     req.body.icon = datIcon
     notifier.notify(req.body)
   })
-  
+
   app.on('download', function (req, cb) {
     download(req.body, cb)
   })
@@ -133,10 +133,10 @@ function download (dat, cb) {
   debug('downloading', dat)
   db.download(dat.link, dat.path, done)
 
-  function done (err, link, port, close) {
+  function done (err, swarm) {
     debug('done', arguments)
     if (err) return cb(err)
-    RUNNING[dat.path] = close
+    RUNNING[dat.path] = swarm.close
     dat.state = 'active'
     dat.date = Date.now()
     config.update(dat)
@@ -166,11 +166,10 @@ function start (dat, cb) {
     db.joinTcpSwarm(link, done)
   })
 
-  function done (err, link, port, close) {
+  function done (err, swarm) {
     debug('done', arguments)
     if (err) return cb(err)
-    RUNNING[dat.path] = close
-    dat.link = link
+    RUNNING[dat.path] = swarm.close
     dat.state = 'active'
     dat.date = Date.now()
     config.update(dat)
