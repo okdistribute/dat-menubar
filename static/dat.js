@@ -1,7 +1,7 @@
 var Client = require('electron-rpc/client')
 var client = new Client()
 
-var dat = require('dat-browserify')
+var dat = require('dat')
 var Manager = {}
 
 Manager.download = function (data, cb) {
