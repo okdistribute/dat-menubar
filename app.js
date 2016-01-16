@@ -137,6 +137,7 @@ function download (dat, cb) {
     debug('done', arguments)
     if (err) return cb(err)
     RUNNING[dat.path] = swarm.close
+    dat.link = swarm.link
     dat.state = 'active'
     dat.date = Date.now()
     config.update(dat)
@@ -171,6 +172,7 @@ function start (dat, cb) {
     if (err) return cb(err)
     RUNNING[dat.path] = swarm.close
     dat.state = 'active'
+    dat.link = swarm.link
     dat.date = Date.now()
     config.update(dat)
     if (cb) cb(null, dat)
