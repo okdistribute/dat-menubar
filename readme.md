@@ -9,6 +9,7 @@ Sharing a folder gives you a link. Give that link to someone else. They put the 
 ## TODO
 
 - [x] Create distribution tarball/.app
+- [x] sends data over webrtc swarm as well as server
 - [ ] tests
 - [ ] windows
 - [ ] See info on each dat (e.g., number of peers)

@@ -1,16 +1,25 @@
-var path = require('path')
+var Client = require('electron-rpc/client')
+var client = new Client()
 
-function Dat (data) {
-  if (!(this instanceof Dat)) return new Dat(data)
-  this.data = {
-    name: data.name || path.basename(data.path),
-    path: data.path,
-    state: data.state || 'active',
-    link: data.link || undefined,
-    date: data.date || Date.now() // TODO: grab most recent mtime from the files
-  }
+var dat = require('dat-browserify')
+var Manager = {}
+
+Manager.download = function (data, cb) {
+  client.request('download', data, function (err, data) {
+    if (err) return cb(err)
+    var db = dat()
+    db.joinWebrtcSwarm(data.link)
+    return cb(null, data)
+  })
 }
 
-Dat.prototype.share = function () {
-
+Manager.share = function (data, cb) {
+  client.request('share', data, function (err, data) {
+    if (err) return cb(err)
+    var db = dat()
+    db.joinWebrtcSwarm(data.link)
+    return cb(null, data)
+  })
 }
+
+module.exports = Manager

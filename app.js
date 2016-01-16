@@ -82,16 +82,16 @@ mb.on('ready', function () {
     req.body.icon = datIcon
     notifier.notify(req.body)
   })
-
-  app.on('download', function task (req, cb) {
+  
+  app.on('download', function (req, cb) {
     download(req.body, cb)
   })
 
-  app.on('share', function task (req, cb) {
+  app.on('share', function (req, cb) {
     start(req.body, cb)
   })
 
-  app.on('stop', function task (req, cb) {
+  app.on('stop', function (req, cb) {
     stop(req.body, cb)
   })
 

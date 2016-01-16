@@ -14,7 +14,7 @@ var MenuItem = remote.MenuItem
 var Client = require('electron-rpc/client')
 var client = new Client()
 
-var dat = require('./dat.js')
+var Manager = require('./dat.js')
 
 client.request('dats', function (dats) {
   render(dats)
@@ -86,7 +86,7 @@ function render (dats) {
 
       function share (dat, opts) {
         loading(dat)
-        client.request('share', dat, function (err, dat) {
+        Manager.share(dat, function (err, dat) {
           if (err) return onerror(err)
           if (opts.copy) copy(dat)
           update(dat)
@@ -95,7 +95,7 @@ function render (dats) {
 
       function download (dat) {
         loading(dat)
-        client.request('download', dat, function (err, dat) {
+        Manager.download(dat, function (err, dat) {
           if (err) return onerror(err)
           update(dat)
         })
@@ -147,6 +147,7 @@ function render (dats) {
       }}))
       addMenu.append(new MenuItem({ label: 'Share...', click: addButton }))
 
+      // for adding a new share
       self.on('add', function (event) {
         event.original.preventDefault()
         addMenu.popup(electron.remote.getCurrentWindow())
@@ -200,4 +201,14 @@ function onerror (error) {
 window.onerror = function errorHandler (message, url, lineNumber) {
   message = message + '\n' + url + ':' + lineNumber
   onerror(message)
+}
+
+function Dat (data) {
+  return {
+    name: data.name || path.basename(data.path),
+    path: data.path,
+    state: data.state || 'active',
+    link: data.link || undefined,
+    date: data.date || Date.now() // TODO: grab most recent mtime from the files
+  }
 }
