@@ -9,27 +9,28 @@
 <div id="content">
   <div class="sourcelist">
     {{#each dats}}
-    <div class="toolbar row" on-click="open:{{path}}" on-contextmenu="actions:{{path}}">
+    <div class="toolbar row" on-click="open:{{value.location}}" on-contextmenu="actions:{{key}}">
       <div class="left">
-        {{#if this.state === 'active'}}
+        {{#if value.state === 'active'}}
         <div class="indicator active"></div>
         {{/if}}
-        {{#if this.state === 'loading'}}
+        {{#if value.state === 'loading'}}
         <div class="indicator"><img src="{{IMG_PATH}}/spinner.gif" /></div>
         {{/if}}
-        {{#if this.state === 'inactive'}}
+        {{#if value.state === 'inactive'}}
         <div class="indicator inactive"></div>
         {{/if}}
       </div>
       <div class="content">
-        <span class="name">{{this.path}}</span>
-        <!--<div class="date">{{this.link}}</div>-->
-        <div class="date">{{relativeDate(this.date)}}</div>
+        <span class="name">{{value.location}}</span>
       </div>
       <div class="buttons">
-        {{#if this.state !== 'loading'}}
-          <button class="share-button" on-click="share:{{path}}">
-              Share link
+        {{#if value.state !== 'loading'}}
+          <button class="button" on-click="start:{{key}}">
+            Share
+          </button>
+          <button class="button" on-click="delete:{{key}}">
+            X
           </button>
         {{/if}}
       </div>
@@ -41,9 +42,6 @@
   <div class="input-box">
     <input type="text" value="{{link}}" placeholder="Paste link here..." />
     <button type="submit" on-click="download">Download</button>
-  </div>
-  <div class="x clickable" on-click="close:'#download'">
-    x
   </div>
 </div>
 <div class="footer bookend">

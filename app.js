@@ -1,9 +1,7 @@
 var menubar = require('menubar')
 var mkdirp = require('mkdirp')
-var debug = require('debug')('dat-app')
 var path = require('path')
 var Manager = require('dat-manager')
-var parallel = require('run-parallel')
 var ipc = require('ipc')
 var electron = require('electron')
 var homedir = require('os-homedir')()
@@ -11,11 +9,7 @@ var notifier = require('node-notifier')
 
 var datPath = path.join(homedir, '.dat')
 mkdirp.sync(datPath)
-var configFile = path.join(datPath, 'config.json')
-var config = require('./config.js')(configFile)
 var datIcon = path.join(__dirname, 'static', 'images', 'dat-icon.png')
-
-var RUNNING = {}
 
 var link, dir
 
@@ -34,7 +28,7 @@ mb.on('show', function show () {
   app.configure(mb.window.webContents)
   mb.window.webContents.on('did-finish-load', function () {
     if (link) mb.window.webContents.send('download', link)
-    if (dir) mb.window.webContents.send('start', dir)
+    if (dir) mb.window.webContents.send('share', dir)
     link = false
     dir = false
   })
@@ -62,7 +56,7 @@ var manager = Manager()
 
 mb.on('ready', function () {
   mb.tray.on('drop-files', function (event, paths) {
-    if (mb.window) mb.window.webContents.send('start', paths[0])
+    if (mb.window) mb.window.webContents.send('share', paths[0])
     else dir = paths[0]
   })
 
@@ -73,12 +67,21 @@ mb.on('ready', function () {
   })
 
   app.on('notify', function (req) {
-    req.body.icon = datIcon
+    req.body.icon = path.join(__dirname, 'static', 'images', 'dat-data-blank-small.png')
     notifier.notify(req.body)
   })
 
+  app.on('share', function (req, cb) {
+    var name = path.basename(req.body.location)
+    manager.share(name, req.body.location, cb)
+  })
+
+  app.on('download', function (req, cb) {
+    manager.start(req.body.link, {location: req.body.location, link: req.body.link}, cb)
+  })
+
   app.on('start', function (req, cb) {
-    manager.start(req.body.name, req.body, cb)
+    manager.start(req.body.name, cb)
   })
 
   app.on('stop', function (req, cb) {

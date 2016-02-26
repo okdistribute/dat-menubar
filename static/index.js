@@ -29,12 +29,15 @@ function render (dats) {
     onrender: function () {
       var self = this
 
-      ipc.on('update', function (event, dats) {
-        self.set('dats', dats)
-      })
+      function update () {
+        client.request('dats', function (err, dats) {
+          if (err) return onerror(err)
+          self.set('dats', dats)
+        })
+      }
 
-      ipc.on('start', function (event, path) {
-        start({location: path}, {copy: true})
+      ipc.on('share', function (event, location) {
+        self.fire('share', location)
       })
 
       ipc.on('download', function (event, link) {
@@ -46,111 +49,109 @@ function render (dats) {
       })
 
       dragDrop(document.querySelector('#content'), function (files) {
-        start({location: files[0]})
+        self.fire('share', files[0])
       })
 
-      function update (dat) {
-        dats[dat.location] = dat
-        self.set('dats', dats)
-      }
-
-      function stop (dat) {
-        dat = normalize(dat)
-        client.request('stop', dat, function (err, dat) {
-          if (err) return onerror(err)
-          update(dat)
+      self.on('share', function (event, location) {
+        if (!location) location = event
+        add({
+          state: 'loading',
+          location: location,
+          name: location
         })
-      }
-
-      function del (dat) {
-        dat = normalize(dat)
-        client.request('delete', dat, function (err, dat) {
+        console.log('sharing', location)
+        client.request('share', {location: location}, function (err, dat) {
           if (err) return onerror(err)
-          delete dats[dat.path]
-          self.set('dats', dats)
+          copy(dat.value.link)
+          update()
         })
-      }
-
-      self.on('start', function (event, location) {
-        start(dats[location], {copy: true})
-        event.original.preventDefault()
-        event.original.stopPropagation()
       })
 
-      function loading (dat) {
-        dat.state = 'loading'
-        update(dat)
-      }
-
-      function start (dat, opts, cb) {
-        dat = normalize(dat)
-        loading(dat)
-        client.request('start', dat, function (err, data) {
+      self.on('start', function (event, name) {
+        if (!name) {
+          name = event
+        } else {
+          event.original.preventDefault()
+          event.original.stopPropagation()
+        }
+        var dat = get(name)
+        dat.value.state = 'loading'
+        client.request('start', {name: name}, function (err, dat) {
           if (err) return onerror(err)
-          update(dat)
-          if (opts.copy) copy(dat)
-          if (cb) cb(null, dat)
+          copy(dat.value.link)
+          update()
         })
-      }
+      })
 
-      function copy (dat) {
-        electron.clipboard.writeText(dat.link)
+      function copy (link) {
+        electron.clipboard.writeText(link)
         var message = {
-          title: 'Link copied!',
-          message: dat.link
+          title: 'Dat',
+          message: 'A link has been copied to your clipboard.'
         }
         client.request('notify', message)
       }
+
+      self.on('stop', function (event, name) {
+        if (!name) name = event
+        var dat = get(name)
+        dat.value.state = 'loading'
+        client.request('stop', {name: name}, function (err, dat) {
+          if (err) return onerror(err)
+          update()
+        })
+      })
+
+      self.on('delete', function (event, name) {
+        if (!name) {
+          name = event
+        } else {
+          event.original.preventDefault()
+          event.original.stopPropagation()
+        }
+        var dat = get(name)
+        dat.value.state = 'loading'
+        client.request('delete', {name: name}, function (err, dat) {
+          if (err) return onerror(err)
+          update()
+        })
+      })
 
       self.on('open', function (event, path) {
         shell.openItem(path)
         ipc.send('hide')
       })
 
-      self.on('actions', function (event, location) {
+      self.on('actions', function (event, name) {
         var actionMenu = new Menu()
-        var dat = dats[location]
-        if (dat.state !== 'inactive') {
+        var dat = get(name)
+        actionMenu.append(new MenuItem({ label: 'Copy link', click: function () {
+          copy(dat.value.link)
+        }}))
+
+        if (dat.value.state !== 'inactive') {
           actionMenu.append(new MenuItem({ label: 'Stop sharing', click: function () {
-            stop(dat)
+            self.fire('stop', dat.key)
           }}))
         }
-        actionMenu.append(new MenuItem({ label: 'Remove from list', click: function () {
-          del(dat)
-        }}))
         actionMenu.popup(electron.remote.getCurrentWindow())
         event.original.preventDefault()
       })
 
       var settings = new Menu()
-      // settings.append(new MenuItem({ label: 'Debug' }))
       settings.append(new MenuItem({ label: 'Stop sharing and quit', click: function () { ipc.send('quit') } }))
-
       self.on('settings', function (event) {
         event.original.preventDefault()
         settings.popup(electron.remote.getCurrentWindow())
       })
 
-      var addMenu = new Menu()
-      addMenu.append(new MenuItem({ label: 'Download from link', click: function () {
-        var downloadBox = document.querySelector('#download')
-        downloadBox.classList.add('open')
-      }}))
-      addMenu.append(new MenuItem({ label: 'Share...', click: addButton }))
-
-      // for adding a new share
       self.on('add', function (event) {
-        event.original.preventDefault()
-        addMenu.popup(electron.remote.getCurrentWindow())
-      })
-
-      function addButton () {
         var opts = {properties: [ 'openDirectory' ]}
         dialog.showOpenDialog(opts, function (directories) {
           if (!directories) return
-          start({location: directories[0]}, {copy: true})
+          self.fire('share', directories[0])
         })
-      }
+      })
 
       self.on('close', function (event, selector) {
         document.querySelector(selector).classList.remove('open')
@@ -172,9 +173,36 @@ function render (dats) {
           if (!directories) return
           var downloadBox = document.querySelector('#download')
           downloadBox.classList.remove('open')
-          start({link: link, location: directories[0]})
-          self.set('link', '')
+          var location = directories[0]
+          add({
+            link: link,
+            location: location,
+            state: 'loading'
+          })
+          client.request('download', {link: link, location: location}, function (err) {
+            if (err) return onerror(err)
+            update()
+          })
         })
+      }
+
+      function add (dat) {
+        if (!dat.value) {
+          dat = {
+            key: dat.key || dat.location,
+            value: dat
+          }
+        }
+        var dats = self.get('dats')
+        dats.push(dat)
+        self.set('dats', dats)
+      }
+
+      function get (name) {
+        var dats = self.get('dats')
+        for (var i = 0; i < dats.length; i++) {
+          if (dats[i].key === name) return dats[i]
+        }
       }
     }
   })
@@ -190,14 +218,4 @@ function onerror (error) {
 window.onerror = function errorHandler (message, url, lineNumber) {
   message = message + '\n' + url + ':' + lineNumber
   onerror(message)
-}
-
-function normalize (data) {
-  return {
-    name: data.name || path.basename(data.path),
-    location: data.location,
-    state: data.state || 'active',
-    link: data.link || undefined,
-    date: data.date || Date.now() // TODO: grab most recent mtime from the files
-  }
 }
