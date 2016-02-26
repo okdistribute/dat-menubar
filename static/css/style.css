@@ -179,7 +179,7 @@ button[type="submit"] {
 .indicator {
   width: 20px;
   height: 25px;
-  margin-top: 5px;
+  margin-top: 6px;
   background-repeat: no-repeat;
   background-size: contain;
 }
