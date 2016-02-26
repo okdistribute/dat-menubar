@@ -67,7 +67,10 @@ mb.on('ready', function () {
   })
 
   app.on('notify', function (req) {
-    req.body.icon = path.join(__dirname, 'static', 'images', 'dat-data-blank-small.png')
+    req.body.icon = null
+    req.body.appIcon = null
+    req.body.contentImage = null
+    req.body.sender = 'com.electron.dat'
     notifier.notify(req.body)
   })
 
