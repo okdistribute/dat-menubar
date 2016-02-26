@@ -20,6 +20,7 @@
   "homepage": "https://github.com/karissa/dat-app#readme",
   "dependencies": {
     "dat": "git+https://github.com/maxogden/dat.git",
+    "dat-manager": "^1.0.0",
     "debug": "^2.2.0",
     "drag-and-drop-files": "0.0.1",
     "electron-packager": "^5.2.0",
