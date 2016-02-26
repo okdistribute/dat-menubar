@@ -22,8 +22,8 @@ This app under active development and not production ready. If you want to test 
 Easy to install and run:
 
 ```
-node_modules $  git clone http://github.com/karissa/dat-app
-node_modules $ cd dat-app
+node_modules $  git clone http://github.com/karissa/dat-desk
+node_modules $ cd dat-desk
 dat-app $ npm install
 dat-app $ npm start
 ```
