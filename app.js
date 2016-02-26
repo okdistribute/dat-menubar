@@ -1,5 +1,4 @@
 var menubar = require('menubar')
-var mkdirp = require('mkdirp')
 var path = require('path')
 var Manager = require('dat-manager')
 var ipc = require('ipc')
@@ -7,8 +6,6 @@ var electron = require('electron')
 var homedir = require('os-homedir')()
 var notifier = require('node-notifier')
 
-var datPath = path.join(homedir, '.dat')
-mkdirp.sync(datPath)
 var datIcon = path.join(__dirname, 'static', 'images', 'dat-icon.png')
 
 var link, dir
@@ -52,7 +49,7 @@ mb.app.on('open-url', onopen)
 
 var Server = require('electron-rpc/server')
 var app = new Server()
-var manager = Manager()
+var manager = Manager({DB_PATH: path.join(homedir, '.datapp', 'db')})
 
 mb.on('ready', function () {
   mb.tray.on('drop-files', function (event, paths) {
