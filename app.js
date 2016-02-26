@@ -1,8 +1,8 @@
 var menubar = require('menubar')
 var mkdirp = require('mkdirp')
 var debug = require('debug')('dat-app')
-var Dat = require('dat')
 var path = require('path')
+var Manager = require('dat-manager')
 var parallel = require('run-parallel')
 var ipc = require('ipc')
 var electron = require('electron')
@@ -34,7 +34,7 @@ mb.on('show', function show () {
   app.configure(mb.window.webContents)
   mb.window.webContents.on('did-finish-load', function () {
     if (link) mb.window.webContents.send('download', link)
-    if (dir) mb.window.webContents.send('share', dir)
+    if (dir) mb.window.webContents.send('start', dir)
     link = false
     dir = false
   })
@@ -58,24 +58,18 @@ mb.app.on('open-url', onopen)
 
 var Server = require('electron-rpc/server')
 var app = new Server()
+var manager = Manager()
 
 mb.on('ready', function () {
   mb.tray.on('drop-files', function (event, paths) {
-    if (mb.window) mb.window.webContents.send('share', paths[0])
+    if (mb.window) mb.window.webContents.send('start', paths[0])
     else dir = paths[0]
   })
 
-  loadDats()
   if (link) mb.showWindow()
 
   app.on('dats', function (req, cb) {
-    config.read()
-    cb(config.dats)
-  })
-
-  app.on('get-one', function (req, cb) {
-    config.read()
-    cb(config.get(req.body.path))
+    manager.list(cb)
   })
 
   app.on('notify', function (req) {
@@ -83,115 +77,15 @@ mb.on('ready', function () {
     notifier.notify(req.body)
   })
 
-  app.on('download', function (req, cb) {
-    download(req.body, cb)
-  })
-
-  app.on('share', function (req, cb) {
-    start(req.body, cb)
+  app.on('start', function (req, cb) {
+    manager.start(req.body.name, req.body, cb)
   })
 
   app.on('stop', function (req, cb) {
-    stop(req.body, cb)
+    manager.stop(req.body.name, cb)
   })
 
-  app.on('remove', function task (req, cb) {
-    config.read()
-    stop(req.body, function (err, dat) {
-      if (err) return cb(err)
-      config.del(dat.path)
-      return cb(null, dat)
-    })
+  app.on('delete', function task (req, cb) {
+    manager.delete(req.body.name, cb)
   })
 })
-
-function loadDats () {
-  config.read()
-  var keys = Object.keys(config.dats)
-
-  var tasks = []
-  for (var i = 0; i < keys.length; i++) {
-    var dat = config.get(keys[i])
-    if (dat.state !== 'inactive') {
-      tasks.push(function (cb) {
-        start(dat, cb)
-      })
-    }
-  }
-
-  parallel(tasks, function done (err) {
-    if (!mb.window) return
-    if (err) mb.window.webContents.send('error', err.message)
-    config.read()
-    mb.window.webContents.send('update', config.dats)
-  })
-}
-
-function download (dat, cb) {
-  config.read()
-  var db = Dat()
-  debug('downloading', dat)
-  db.download(dat.link, dat.path, done)
-
-  function done (err, swarm) {
-    debug('done', arguments)
-    if (err) return cb(err)
-    RUNNING[dat.path] = swarm.close
-    dat.link = swarm.link
-    dat.state = 'active'
-    dat.date = Date.now()
-    config.update(dat)
-    if (cb) cb(null, dat)
-  }
-}
-
-function restart (dat, cb) {
-  debug('restarting', dat)
-  stop(dat, function (err, dat) {
-    debug('done', arguments)
-    if (err) throw err
-    start(dat, cb)
-  })
-}
-
-function start (dat, cb) {
-  if (RUNNING[dat.path]) return restart(dat, cb)
-  config.read()
-  dat.state = 'loading'
-  config.update(dat)
-  debug('starting', dat)
-  var db = Dat()
-  if (dat.link) return db.download(dat.link, dat.path, done)
-  db.addFiles(dat.path, function (err, link) {
-    if (err) return cb(err)
-    db.joinTcpSwarm(link, done)
-  })
-
-  function done (err, swarm) {
-    debug('done', arguments)
-    if (err) return cb(err)
-    RUNNING[dat.path] = swarm.close
-    dat.state = 'active'
-    dat.link = swarm.link
-    dat.date = Date.now()
-    config.update(dat)
-    if (cb) cb(null, dat)
-  }
-}
-
-function stop (dat, cb) {
-  config.read()
-  var close = RUNNING[dat.path]
-  debug('stopping', dat)
-  if (close) close(done)
-  else done()
-
-  function done (err) {
-    debug('done', err)
-    if (err) return cb(err)
-    RUNNING[dat.path] = undefined
-    dat.state = 'inactive'
-    config.update(dat)
-    if (cb) cb(null, dat)
-  }
-}

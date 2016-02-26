@@ -14,9 +14,8 @@ var MenuItem = remote.MenuItem
 var Client = require('electron-rpc/client')
 var client = new Client()
 
-var Manager = require('./dat.js')
-
-client.request('dats', function (dats) {
+client.request('dats', function (err, dats) {
+  if (err) return onerror(err)
   render(dats)
 })
 
@@ -34,9 +33,8 @@ function render (dats) {
         self.set('dats', dats)
       })
 
-      ipc.on('share', function (event, path) {
-        var dat = Dat({path: path})
-        share(dat, {copy: true})
+      ipc.on('start', function (event, path) {
+        start({location: path}, {copy: true})
       })
 
       ipc.on('download', function (event, link) {
@@ -48,17 +46,16 @@ function render (dats) {
       })
 
       dragDrop(document.querySelector('#content'), function (files) {
-        var file = files[0]
-        var dat = Dat(dat, {path: file.path})
-        update(dat)
+        start({location: files[0]})
       })
 
       function update (dat) {
-        dats[dat.path] = dat
+        dats[dat.location] = dat
         self.set('dats', dats)
       }
 
       function stop (dat) {
+        dat = normalize(dat)
         client.request('stop', dat, function (err, dat) {
           if (err) return onerror(err)
           update(dat)
@@ -66,15 +63,16 @@ function render (dats) {
       }
 
       function del (dat) {
-        client.request('remove', dat, function (err, dat) {
+        dat = normalize(dat)
+        client.request('delete', dat, function (err, dat) {
           if (err) return onerror(err)
           delete dats[dat.path]
           self.set('dats', dats)
         })
       }
 
-      self.on('share', function (event, path) {
-        share(dats[path], {copy: true})
+      self.on('start', function (event, location) {
+        start(dats[location], {copy: true})
         event.original.preventDefault()
         event.original.stopPropagation()
       })
@@ -84,20 +82,14 @@ function render (dats) {
         update(dat)
       }
 
-      function share (dat, opts) {
+      function start (dat, opts, cb) {
+        dat = normalize(dat)
         loading(dat)
-        Manager.share(dat, function (err, dat) {
+        client.request('start', dat, function (err, data) {
           if (err) return onerror(err)
+          update(dat)
           if (opts.copy) copy(dat)
-          update(dat)
-        })
-      }
-
-      function download (dat) {
-        loading(dat)
-        Manager.download(dat, function (err, dat) {
-          if (err) return onerror(err)
-          update(dat)
+          if (cb) cb(null, dat)
         })
       }
 
@@ -115,10 +107,9 @@ function render (dats) {
         ipc.send('hide')
       })
 
-      self.on('actions', function (event, path) {
+      self.on('actions', function (event, location) {
         var actionMenu = new Menu()
-        var dat = dats[path]
-        console.log(dat)
+        var dat = dats[location]
         if (dat.state !== 'inactive') {
           actionMenu.append(new MenuItem({ label: 'Stop sharing', click: function () {
             stop(dat)
@@ -157,8 +148,7 @@ function render (dats) {
         var opts = {properties: [ 'openDirectory' ]}
         dialog.showOpenDialog(opts, function (directories) {
           if (!directories) return
-          var dat = Dat({path: directories[0]})
-          share(dat, {copy: true})
+          start({location: directories[0]}, {copy: true})
         })
       }
 
@@ -182,8 +172,7 @@ function render (dats) {
           if (!directories) return
           var downloadBox = document.querySelector('#download')
           downloadBox.classList.remove('open')
-          var dat = Dat({link: link, path: directories[0]})
-          download(dat)
+          start({link: link, location: directories[0]})
           self.set('link', '')
         })
       }
@@ -203,10 +192,10 @@ window.onerror = function errorHandler (message, url, lineNumber) {
   onerror(message)
 }
 
-function Dat (data) {
+function normalize (data) {
   return {
     name: data.name || path.basename(data.path),
-    path: data.path,
+    location: data.location,
     state: data.state || 'active',
     link: data.link || undefined,
     date: data.date || Date.now() // TODO: grab most recent mtime from the files
