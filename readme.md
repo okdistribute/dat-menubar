@@ -8,12 +8,7 @@ Sharing a folder gives you a link. Give that link to someone else. They put the 
 
 ## TODO
 
-- [x] Create distribution tarball/.app
-- [x] sends data over webrtc swarm as well as server
-- [ ] windows .exe
-- [ ] move loading responsibility to ui, not app
-- [x] drag and drop to dat menu bar icon
-- [x] Prompt to start downloading when the user clicks a link starting with `dat://`
+See issue tracker.
 
 ## Developer Install
 
