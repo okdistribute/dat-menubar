@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron app.js",
-    "mac-bundle": "electron-packager . Dat --platform=darwin --arch=x64 --version=0.35.5 --ignore=node_modules/electron-prebuilt && cp info.plist Dat-darwin-x64/Dat.app/Contents/Info.plist && cp icon.icns Dat-darwin-x64/Dat.app/Contents/Resources/atom.icns"
+    "mac-bundle": "electron-packager . --prune Dat --platform=darwin --arch=x64 --version=0.35.5 --ignore=node_modules/electron-prebuilt && cp info.plist Dat-darwin-x64/Dat.app/Contents/Info.plist && cp icon.icns Dat-darwin-x64/Dat.app/Contents/Resources/atom.icns",
+    "win-bundle": "electron-packager . --prune Dat --platform=win32 --arch=ia32 --version=0.35.5 --ignore=node_modules/electron-prebuilt,Dat-darwin-x64"
   },
   "repository": {
     "type": "git",
