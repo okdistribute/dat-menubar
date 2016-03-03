@@ -1,5 +1,6 @@
 var path = require('path')
 var dragDrop = require('drag-and-drop-files')
+var debug = require('debug')('dat-app')
 var shell = require('shell')
 var electron = require('electron')
 var fs = require('fs')
@@ -31,6 +32,7 @@ function render (dats) {
 
       function update () {
         client.request('dats', function (err, dats) {
+          console.log('dats', err, dats)
           if (err) return onerror(err)
           self.set('dats', dats)
         })
@@ -54,12 +56,13 @@ function render (dats) {
 
       self.on('share', function (event, location) {
         if (!location) location = event
-        add({
+        var data = {
           state: 'loading',
           location: location,
           name: location
-        })
-        console.log('sharing', location)
+        }
+        add(data)
+        debug('sharing', data)
         client.request('share', {location: location}, function (err, dat) {
           if (err) return onerror(err)
           copy(dat.value.link)
