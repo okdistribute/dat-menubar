@@ -212,9 +212,7 @@ function render (dats) {
 }
 
 function onerror (error) {
-  var message = error.stack || error.message || JSON.stringify(error)
-  console.error(message)
-  window.alert(message)
+  console.error(error)
 }
 
 // Throw unhandled javascript errors
