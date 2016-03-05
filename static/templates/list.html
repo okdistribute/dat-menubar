@@ -23,6 +23,7 @@
       </div>
       <div class="content">
         <span class="name">{{value.location}}</span>
+        <div class="date">{{prettyBytes(value.stats.size)}}</div>
       </div>
       <div class="buttons">
         {{#if value.state !== 'loading'}}
