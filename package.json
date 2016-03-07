@@ -21,7 +21,7 @@
   "homepage": "https://github.com/karissa/dat-app#readme",
   "dependencies": {
     "dat": "^9.7.0",
-    "dat-manager": "^1.1.0",
+    "dat-manager": "^1.2.0",
     "debug": "^2.2.0",
     "drag-and-drop-files": "0.0.1",
     "electron-packager": "^5.2.0",
