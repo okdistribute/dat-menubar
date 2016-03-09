@@ -57,8 +57,6 @@ mb.on('ready', function () {
     else dir = paths[0]
   })
 
-  mb.showWindow()
-
   app.on('dats', function (req, cb) {
     manager.list(cb)
   })

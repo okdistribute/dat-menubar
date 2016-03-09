@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/karissa/dat-app#readme",
   "dependencies": {
+    "bel": "^3.0.0",
     "dat": "^9.7.0",
     "dat-manager": "^1.3.0",
     "debug": "^2.2.0",
@@ -27,11 +28,10 @@
     "electron-packager": "^5.2.0",
     "electron-prebuilt": "^0.35.5",
     "electron-rpc": "^1.0.3",
-    "menubar": "^2.3.0",
+    "menubar": "^4.0.2",
     "mkdirp": "^0.5.1",
     "node-notifier": "^4.4.0",
     "os-homedir": "^1.0.1",
-    "ractive-toolkit": "^1.1.0",
     "register-multicast-dns": "^1.1.0",
     "run-parallel": "^1.1.4"
   }
