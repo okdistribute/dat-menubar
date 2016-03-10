@@ -1,8 +1,7 @@
 /* overrides */
 * { -webkit-user-select: none; }
-.configure-content { bottom: 43px; }
 .content .table-view { margin: 0 !important; }
 .table-view-cell a:focus { background: rgba(0,0,0,.05);}
 ul, code {font-size: 14px; color: #777;}
-.badge { padding: 5px 8px; border-radius: 3px; }
 .cursor-pointer { cursor: pointer; }
+.table-view-cell .octicon { line-height: 20px; font-size: 20px; }
