@@ -7,7 +7,7 @@ function onselected (id) {
   console.log('selected', id)
 }
 
-var dats = [{id: 'foo', label: 'cool data'}]
+var dats = [{id: 'foo', label: 'cool data'}, {id: 'foo', label: 'cooler data'}]
 var container = document.querySelector('#container')
 var headerEl = header(dats, onselected)
 var listEl = list(dats, onselected)
