@@ -6,9 +6,7 @@ var electron = require('electron')
 var homedir = require('os-homedir')()
 var notifier = require('node-notifier')
 
-var datIcon = path.join(__dirname, 'static', 'images', 'dat-icon.png')
-
-var link, dir
+var datIcon = path.join(__dirname, 'img', 'icon.png')
 
 var mb = menubar({
   dir: __dirname,
