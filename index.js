@@ -3,6 +3,26 @@ var extend = require('xtend')
 var header = require('./components/header.js')
 var body = require('./components/body.js')
 var footer = require('./components/footer.js')
+var Client = require('electron-rpc/client')
+var client = new Client()
+
+var previous = [] // experimental
+var state = {
+  view: 'loading',
+  dats: []
+}
+
+client.request('dats', function (err, dats) {
+  if (err) return onerror(err)
+  state.dats = dats
+  console.log('dats', dats)
+  update({view: 'home'})
+})
+
+window.onaction = onaction // for debugging
+
+var container = render()
+document.body.appendChild(container)
 
 function onaction (action, params) {
   if (!action || action.length === 0) return
@@ -14,16 +34,9 @@ function onaction (action, params) {
   console.error('Unknown action:', action)
 }
 
-window.onaction = onaction // for debugging
-var previous = [] // experimental
-
-var state = {
-  view: 'home',
-  dats: [{id: 'cool', label: 'cool data'}, {id: 'cooler', label: 'cooler data'}]
+function onerror (err) {
+  throw err
 }
-
-var container = render()
-document.body.appendChild(container)
 
 function render () {
   return yo`<div id="app">
@@ -34,7 +47,9 @@ function render () {
 }
 
 function update (newState) {
-  previous.push(state)
-  state = extend(state, newState)
+  if (newState) {
+    previous.push(state)
+    state = extend(state, newState)
+  }
   yo.update(container, render())
 }

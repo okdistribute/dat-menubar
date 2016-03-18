@@ -32,5 +32,7 @@ module.exports = function (state, onaction) {
       </nav>`
   }
 
+  views.loading = views.home
+
   return views[state.view]()
 }
