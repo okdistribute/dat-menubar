@@ -3,6 +3,7 @@ var extend = require('xtend')
 var header = require('./components/header.js')
 var body = require('./components/body.js')
 var footer = require('./components/footer.js')
+var remote = require('remote')
 var Client = require('electron-rpc/client')
 var client = new Client()
 
@@ -12,27 +13,21 @@ var state = {
   dats: []
 }
 
-client.request('dats', function (err, dats) {
-  if (err) return onerror(err)
-  state.dats = dats
-  console.log('dats', dats)
-  update({view: 'home'})
-})
-
-window.onaction = onaction // for debugging
-
 var container = render()
 document.body.appendChild(container)
+listDats()
 
 function onaction (action, params) {
   if (!action || action.length === 0) return
   if (action === 'home') return update({view: 'home'})
-  if (action === 'add') return update({view: 'add'})
+  if (action === 'add') return chooseFiles()
   if (action === 'settings') return update({view: 'settings'})
   if (action === 'detail') return update({view: 'detail', params: params})
   if (action === 'back') return update(previous[previous.length - 1]) // experimental
   console.error('Unknown action:', action)
 }
+
+window.onaction = onaction // for debugging
 
 function onerror (err) {
   throw err
@@ -52,4 +47,27 @@ function update (newState) {
     state = extend(state, newState)
   }
   yo.update(container, render())
+}
+
+function chooseFiles () {
+  remote.dialog.showOpenDialog({properties: ['openDirectory']}, function (directories) {
+    if (!directories.length) return
+    share(directories[0])
+  })
+}
+
+function share (dir) {
+  client.request('share', {location: dir}, function (err, dat) {
+    if (err) return onerror(err)
+    listDats()
+  })
+}
+
+function listDats () {
+  client.request('dats', function (err, dats) {
+    if (err) return onerror(err)
+    state.dats = dats
+    console.log('dats', dats)
+    update({view: 'home'})
+  })
 }
