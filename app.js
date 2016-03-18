@@ -32,10 +32,6 @@ ipc.on('hide', function hide (ev) {
   mb.hideWindow()
 })
 
-var onopen = function (lnk) {
-  link = lnk
-}
-
 var Server = require('electron-rpc/server')
 var app = new Server()
 var manager = Manager({DB_PATH: path.join(homedir, '.datapp', 'db')})
