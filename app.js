@@ -11,7 +11,7 @@ var datIcon = path.join(__dirname, 'img', 'icon.png')
 var mb = menubar({
   dir: __dirname,
   icon: datIcon,
-  width: 450
+  width: 430
 })
 
 process.on('uncaughtException', function (err) {
