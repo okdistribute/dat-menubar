@@ -13,21 +13,21 @@ module.exports = function (state, onaction) {
 
   views.add = function () {
     return yo`<nav class="bar bar-nav">
-        <a class="icon icon-back pull-left" onclick=${ function () { onaction('home') } }></a>
+        <a class="icon icon-left-nav pull-left" onclick=${ function () { onaction('home') } }></a>
         <h1 class="title">Add</h1>
       </nav>`
   }
 
   views.settings = function () {
     return yo`<nav class="bar bar-nav">
-        <a class="icon icon-back pull-left" onclick=${ function () { onaction('home') } }></a>
+        <a class="icon icon-left-nav pull-left" onclick=${ function () { onaction('home') } }></a>
         <h1 class="title">Settings</h1>
       </nav>`
   }
 
   views.detail = function () {
     return yo`<nav class="bar bar-nav">
-        <a class="icon icon-back pull-left" onclick=${ function () { onaction('home') } }></a>
+        <a class="icon icon-left-nav pull-left" onclick=${ function () { onaction('home') } }></a>
         <h1 class="title">Details</h1>
       </nav>`
   }

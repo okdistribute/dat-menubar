@@ -1,10 +1,11 @@
+var remote = require('remote')
+var Client = require('electron-rpc/client')
 var yo = require('yo-yo')
 var extend = require('xtend')
+
 var header = require('./components/header.js')
 var body = require('./components/body.js')
 var footer = require('./components/footer.js')
-var remote = require('remote')
-var Client = require('electron-rpc/client')
 var client = new Client()
 
 var previous = [] // experimental
@@ -66,8 +67,6 @@ function share (dir) {
 function listDats () {
   client.request('dats', function (err, dats) {
     if (err) return onerror(err)
-    state.dats = dats
-    console.log('dats', dats)
-    update({view: 'home'})
+    update({view: 'home', dats: dats})
   })
 }

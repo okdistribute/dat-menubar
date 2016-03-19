@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/karissa/dat-app#readme",
   "dependencies": {
+    "csjs-inject": "^1.0.0",
     "dat": "^9.7.0",
     "dat-manager": "^1.4.4",
     "debug": "^2.2.0",
