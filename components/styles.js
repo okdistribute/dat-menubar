@@ -17,24 +17,12 @@ module.exports = csjs`
 .tooltip:after {
   position: absolute;
   visibility: hidden;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
-  -webkit-transition:
-      opacity 0.2s ease-in-out,
-        visibility 0.2s ease-in-out,
-        -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    -moz-transition:
-        opacity 0.2s ease-in-out,
-        visibility 0.2s ease-in-out,
-        -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    transition:
-        opacity 0.2s ease-in-out,
-        visibility 0.2s ease-in-out,
-        transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform:    translate3d(0, 0, 0);
-  transform:         translate3d(0, 0, 0);
+  transition:
+    opacity 0.2s ease-in-out,
+    visibility 0.2s ease-in-out,
+    transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transform: translate3d(0, 0, 0);
   pointer-events: none;
 }
 
@@ -44,8 +32,6 @@ module.exports = csjs`
 .tooltip:focus:before,
 .tooltip:focus:after {
   visibility: visible;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
 
@@ -61,12 +47,12 @@ module.exports = csjs`
 .tooltip:after {
   z-index: 1000;
   padding: 8px;
-  width: 160px;
+  width: auto;
   background-color: #000;
   background-color: hsla(0, 0%, 20%, 0.9);
   color: #fff;
   content: attr(data-tooltip);
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.2;
 }
 
@@ -103,9 +89,7 @@ module.exports = csjs`
 .tooltip-top:hover:after,
 .tooltip-top:focus:before,
 .tooltip-top:focus:after {
-  -webkit-transform: translateY(-12px);
-  -moz-transform:    translateY(-12px);
-  transform:         translateY(-12px);
+  transform: translateY(-12px);
 }
 
 /* Left */
@@ -129,9 +113,7 @@ module.exports = csjs`
 .tooltip-left:hover:after,
 .tooltip-left:focus:before,
 .tooltip-left:focus:after {
-  -webkit-transform: translateX(-12px);
-  -moz-transform:    translateX(-12px);
-  transform:         translateX(-12px);
+  transform: translateX(-12px);
 }
 
 /* Bottom */
@@ -154,9 +136,7 @@ module.exports = csjs`
 .tooltip-bottom:hover:after,
 .tooltip-bottom:focus:before,
 .tooltip-bottom:focus:after {
-  -webkit-transform: translateY(12px);
-  -moz-transform:    translateY(12px);
-  transform:         translateY(12px);
+  transform: translateY(12px);
 }
 
 /* Right */
@@ -178,9 +158,7 @@ module.exports = csjs`
 .tooltip-right:hover:after,
 .tooltip-right:focus:before,
 .tooltip-right:focus:after {
-  -webkit-transform: translateX(12px);
-  -moz-transform:    translateX(12px);
-  transform:         translateX(12px);
+  transform: translateX(12px);
 }
 
 /* Move directional arrows down a bit for left/right tooltips */

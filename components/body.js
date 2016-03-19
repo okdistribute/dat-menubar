@@ -52,8 +52,11 @@ module.exports = function (state, onaction) {
 
   function detail (dat) {
     return yo`<ul class="table-view">
-      <li class="table-view-cell">Link ${dat.link} <button class="btn"><span class="octicon octicon-clippy"></span><span>Copy</span></button></li>
-      <li class="table-view-cell">Status <button class="btn btn-negative">Not Sharing</button></li>
+      <li class="table-view-cell table-view-divider">Share Link</li>
+      <li class="table-view-cell small-text">dat://${dat.link} <button onclick=${
+          function () { onaction('copy', 'dat://' + dat.link) }
+        } class="btn"><span class="octicon octicon-clippy"></span><span>Copy</span></button></li>
+      <li class="table-view-cell">Status <button class="btn btn-positive">Sharing</button></li>
     </ul>`
   }
 

@@ -1,3 +1,4 @@
+var electron = require('electron')
 var remote = require('remote')
 var Client = require('electron-rpc/client')
 var yo = require('yo-yo')
@@ -25,6 +26,7 @@ function onaction (action, params) {
   if (action === 'settings') return update({view: 'settings'})
   if (action === 'detail') return update({view: 'detail', params: params})
   if (action === 'back') return update(previous[previous.length - 1]) // experimental
+  if (action === 'copy') return copy(params)
   console.error('Unknown action:', action)
 }
 
@@ -69,4 +71,13 @@ function listDats () {
     if (err) return onerror(err)
     update({view: 'home', dats: dats})
   })
+}
+
+function copy (link) {
+  electron.clipboard.writeText(link)
+  var message = {
+    title: 'Dat',
+    message: 'A link has been copied to your clipboard.'
+  }
+  client.request('notify', message)
 }
