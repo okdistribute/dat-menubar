@@ -1,6 +1,5 @@
 var fs = require('fs')
 var electron = require('electron')
-var path = require('path')
 
 module.exports = Config
 

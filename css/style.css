@@ -1,0 +1,8 @@
+/* overrides */
+.content .table-view { margin: 0 !important; }
+.table-view-cell a:focus { background: rgba(0,0,0,.05);}
+ul, code {font-size: 14px; color: #777;}
+.cursor-pointer { cursor: pointer; }
+.table-view-cell .octicon { padding-right: 3px; }
+.table-view-cell .media-body { font-size: 17px; }
+.small-text { font-size: 9px; }

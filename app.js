@@ -6,14 +6,12 @@ var electron = require('electron')
 var homedir = require('os-homedir')()
 var notifier = require('node-notifier')
 
-var datIcon = path.join(__dirname, 'static', 'images', 'dat-icon.png')
-
-var link, dir
+var datIcon = path.join(__dirname, 'img', 'icon.png')
 
 var mb = menubar({
   dir: __dirname,
   icon: datIcon,
-  width: 380
+  width: 430
 })
 
 process.on('uncaughtException', function (err) {
@@ -23,12 +21,6 @@ process.on('uncaughtException', function (err) {
 
 mb.on('show', function show () {
   app.configure(mb.window.webContents)
-  mb.window.webContents.on('did-finish-load', function () {
-    if (link) mb.window.webContents.send('download', link)
-    if (dir) mb.window.webContents.send('share', dir)
-    link = false
-    dir = false
-  })
   app.send('show')
 })
 
@@ -40,13 +32,6 @@ ipc.on('hide', function hide (ev) {
   mb.hideWindow()
 })
 
-var onopen = function (lnk) {
-  link = lnk
-}
-
-mb.app.on('open-file', onopen)
-mb.app.on('open-url', onopen)
-
 var Server = require('electron-rpc/server')
 var app = new Server()
 var manager = Manager({DB_PATH: path.join(homedir, '.datapp', 'db')})
@@ -54,10 +39,7 @@ var manager = Manager({DB_PATH: path.join(homedir, '.datapp', 'db')})
 mb.on('ready', function () {
   mb.tray.on('drop-files', function (event, paths) {
     if (mb.window) mb.window.webContents.send('share', paths[0])
-    else dir = paths[0]
   })
-
-  mb.showWindow()
 
   app.on('dats', function (req, cb) {
     manager.list(cb)
