@@ -1,6 +1,7 @@
 var yo = require('yo-yo')
 var path = require('path')
 var styles = require('./styles.js')
+var spinner = require('./spinner.js')
 
 module.exports = function (state, onaction) {
   if (state.view === 'home') {
@@ -12,7 +13,7 @@ module.exports = function (state, onaction) {
     var selected = state.dats.find(function (d) {
       if (d.value.link === state.params.id) return true
     })
-    return render(detail(selected.value))
+    return render(detail(selected))
   }
   if (state.view === 'loading') return render(loading())
 
@@ -51,17 +52,37 @@ module.exports = function (state, onaction) {
   }
 
   function detail (dat) {
+    console.log(dat)
     return yo`<ul class="table-view">
       <li class="table-view-cell table-view-divider">Share Link</li>
-      <li class="table-view-cell small-text">dat://${dat.link} <button onclick=${
-          function () { onaction('copy', 'dat://' + dat.link) }
+      <li class="table-view-cell small-text">dat://${dat.value.link} <button onclick=${
+          function () { onaction('copy', 'dat://' + dat.value.link) }
         } class="btn"><span class="octicon octicon-clippy"></span><span>Copy</span></button></li>
-      <li class="table-view-cell">Status <button class="btn btn-positive">Sharing</button></li>
+      <li class="table-view-cell">Status <button class="btn btn-positive">${dat.value.state}</button></li>
+      <li class="table-view-cell table-view-divider">Actions</li>
+      <li class="table-view-cell" >
+        <a onclick=${ function () { onaction('start', {name: dat.key}) } }>
+          <span class="media-object pull-left icon icon-play"></span>
+          <div class="media-body">Start</div>
+        </a>
+      </li>
+      <li class="table-view-cell" >
+        <a onclick=${ function () { onaction('stop', {name: dat.key}) } }>
+          <span class="media-object pull-left icon icon-stop"></span>
+          <div class="media-body">Stop</div>
+        </a>
+      </li>
+      <li class="table-view-cell" >
+        <a onclick=${ function () { onaction('delete', {name: dat.key}) } }>
+          <span class="media-object pull-left icon icon-trash"></span>
+          <div class="media-body">Remove</div>
+        </a>
+      </li>
     </ul>`
   }
 
   function loading () {
-    return yo`<h1>Loading</h1>`
+    return spinner()
   }
 
   function button (id, label, tooltip) {

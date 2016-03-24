@@ -27,6 +27,9 @@ function onaction (action, params) {
   if (action === 'detail') return update({view: 'detail', params: params})
   if (action === 'back') return update(previous[previous.length - 1]) // experimental
   if (action === 'copy') return copy(params)
+  if (action === 'delete') return rpc('delete', params)
+  if (action === 'stop') return rpc('stop', params)
+  if (action === 'start') return rpc('start', params)
   console.error('Unknown action:', action)
 }
 
@@ -55,12 +58,12 @@ function update (newState) {
 function chooseFiles () {
   remote.dialog.showOpenDialog({properties: ['openDirectory']}, function (directories) {
     if (!directories.length) return
-    share(directories[0])
+    rpc('share', {location: directories[0]})
   })
 }
 
-function share (dir) {
-  client.request('share', {location: dir}, function (err, dat) {
+function rpc (action, params) {
+  client.request(action, params, function (err, dat) {
     if (err) return onerror(err)
     listDats()
   })
