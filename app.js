@@ -1,17 +1,18 @@
 var menubar = require('menubar')
 var path = require('path')
 var Manager = require('dat-manager')
-var ipc = require('ipc')
 var electron = require('electron')
 var homedir = require('os-homedir')()
 var notifier = require('node-notifier')
 
 var datIcon = path.join(__dirname, 'img', 'icon.png')
+var ipc = electron.ipcMain
 
 var mb = menubar({
   dir: __dirname,
   icon: datIcon,
-  width: 430
+  width: 430,
+  preloadWindow: true
 })
 
 process.on('uncaughtException', function (err) {
@@ -20,7 +21,6 @@ process.on('uncaughtException', function (err) {
 })
 
 mb.on('show', function show () {
-  app.configure(mb.window.webContents)
   app.send('show')
 })
 
@@ -35,6 +35,10 @@ ipc.on('hide', function hide (ev) {
 var Server = require('electron-rpc/server')
 var app = new Server()
 var manager = Manager({DB_PATH: path.join(homedir, '.datapp', 'db')})
+
+mb.on('after-create-window', function () {
+  app.configure(mb.window.webContents)
+})
 
 mb.on('ready', function () {
   mb.tray.on('drop-files', function (event, paths) {
