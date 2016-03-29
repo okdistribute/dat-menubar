@@ -4,7 +4,7 @@ This is a cross-platform desktop application for [dat](http://dat-data.com). PRs
 
 Sharing a folder gives you a link. Give that link to someone else. They put the link in the app to download the data. The two apps find each other, and the data goes peer to peer, traveling through no centralized servers. The data will be available as long as at least one peer is seeding it.
 
-![open](static/images/open.png)
+![open](img/open.png)
 
 ## TODO
 
