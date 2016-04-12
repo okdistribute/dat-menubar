@@ -5,9 +5,9 @@ module.exports = function (state, onaction) {
 
   views.home = function () {
     return yo`<nav class="bar bar-nav">
-        <a class="icon icon-plus pull-left" onclick=${ function () { onaction('add') } }></a>
+        <a class="icon icon-gear pull-left" onclick=${ function () { onaction('settings') } }></a>
         <h1 class="title">Dat</h1>
-        <a class="icon icon-gear pull-right" onclick=${ function () { onaction('settings') } }></a>
+        <a class="icon icon-plus pull-right" onclick=${ function () { onaction('add') } }></a>
       </nav>`
   }
 

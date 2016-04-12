@@ -24,7 +24,14 @@ function onaction (action, params) {
   if (action === 'home') return update({view: 'home'})
   if (action === 'add') return chooseFiles()
   if (action === 'settings') return update({view: 'settings'})
-  if (action === 'detail') return update({view: 'detail', params: params})
+  if (action === 'detail') {
+    var selected = state.dats.find(function (d) {
+      if (d.value.link === params.id) return true
+    })
+    if (!selected) return listDats('home')
+    params.dat = selected
+    return update({view: 'detail', params: params})
+  }
   if (action === 'back') return update(previous[previous.length - 1]) // experimental
   if (action === 'copy') return copy(params)
   if (action === 'delete') return rpc('delete', params)

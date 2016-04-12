@@ -6,3 +6,4 @@ ul, code {font-size: 14px; color: #777;}
 .table-view-cell .octicon { padding-right: 3px; }
 .table-view-cell .media-body { font-size: 17px; }
 .small-text { font-size: 9px; }
+a:hover { cursor: pointer; }

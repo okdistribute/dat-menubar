@@ -10,9 +10,7 @@ module.exports = function (state, onaction) {
   }
   if (state.view === 'settings') return render(settings())
   if (state.view === 'detail') {
-    var selected = state.dats.find(function (d) {
-      if (d.value.link === state.params.id) return true
-    })
+    var selected = state.params.dat
     return render(detail(selected))
   }
   if (state.view === 'loading') return render(loading())
@@ -24,19 +22,14 @@ module.exports = function (state, onaction) {
   }
 
   function list () {
-    var dats = state.dats.map(function (item) {
-      var dat = item.value
-      var dir = path.basename(dat.location)
-      var tooltip = dat.location
-      return yo`<li class="table-view-cell media">${button(dat.link, dir, tooltip)}</li>`
-    })
+    var dats = state.dats.map(datItem)
     return yo`<ul class="table-view">${dats}</ul>`
   }
 
   function empty () {
     return yo`<ul class="table-view">
       <li class="table-view-cell media">
-        <a class="navigate-right">
+        <a onclick=${ function () { onaction('add') } } class="navigate-right">
           <img class="media-object pull-left" src="img/dat-hex-small.png">
           <div class="media-body">
             Hello!
@@ -53,23 +46,17 @@ module.exports = function (state, onaction) {
 
   function detail (dat) {
     console.log(dat)
+    var active = dat.value.state === 'active'
     return yo`<ul class="table-view">
-      <li class="table-view-cell table-view-divider">Share Link</li>
+      <li class="table-view-cell table-view-divider">${dat.value.location}</li>
       <li class="table-view-cell small-text">dat://${dat.value.link} <button onclick=${
           function () { onaction('copy', 'dat://' + dat.value.link) }
         } class="btn"><span class="octicon octicon-clippy"></span><span>Copy</span></button></li>
-      <li class="table-view-cell">Status <button class="btn btn-positive">${dat.value.state}</button></li>
-      <li class="table-view-cell table-view-divider">Actions</li>
       <li class="table-view-cell" >
-        <a onclick=${ function () { onaction('start', {name: dat.key}) } }>
-          <span class="media-object pull-left icon icon-play"></span>
-          <div class="media-body">Start</div>
-        </a>
-      </li>
-      <li class="table-view-cell" >
-        <a onclick=${ function () { onaction('stop', {name: dat.key}) } }>
-          <span class="media-object pull-left icon icon-stop"></span>
-          <div class="media-body">Stop</div>
+        <a onclick=${ function () { onaction(active ? 'stop' : 'start', {name: dat.key}) } }>
+          <span class="media-object pull-left icon icon-${active ? 'stop' : 'play'}"></span>
+          <span class="badge">${dat.value.state}</span>
+          <div class="media-body">${active ? 'Stop' : 'Start'}</div>
         </a>
       </li>
       <li class="table-view-cell" >
@@ -85,8 +72,19 @@ module.exports = function (state, onaction) {
     return spinner()
   }
 
-  function button (id, label, tooltip) {
+  function datItem (item) {
+    var dat = item.value
+    var dir = path.basename(dat.location)
+    var tooltip = dat.location
+    var badge = dat.state
+    return yo`<li class="table-view-cell media">
+      ${button(dat.link, dir, badge, tooltip)}
+    </li>`
+  }
+
+  function button (id, label, badge, tooltip) {
     return yo`<a class="navigate-right" onclick=${ function () { onaction('detail', {id: id}) } }>
+      <span class="badge">${badge}</span>
       <span class="${styles.tooltip} ${styles['tooltip-right']}" data-tooltip="${tooltip}">${label}</span>
     </a>`
   }
