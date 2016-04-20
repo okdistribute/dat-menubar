@@ -59,7 +59,7 @@ mb.on('ready', function () {
   app.on('link', function (req, cb) {
     manager.link(req.body.dir, function (err, link) {
       if (err) return cb(err)
-      manager.join(link, req.body.dir, {}, cb)
+      manager.join(link, req.body.dir, req.body.opts, cb)
     })
   })
 
