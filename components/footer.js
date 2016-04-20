@@ -1,7 +1,7 @@
 var yo = require('yo-yo')
 
 module.exports = function (state, onaction) {
-  var items = state.dats
+  var items = Object.keys(state.dats)
   return yo`<div class="bar bar-standard bar-footer">
     ${items.length ? stats() : empty()}
   </div>`
