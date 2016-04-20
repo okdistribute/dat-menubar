@@ -25,9 +25,7 @@ function onaction (action, params) {
   if (action === 'add') return chooseFiles()
   if (action === 'settings') return update({view: 'settings'})
   if (action === 'detail') {
-    var selected = state.dats.find(function (d) {
-      if (d.value.link === params.id) return true
-    })
+    var selected = state.dats[params.id]
     if (!selected) return listDats('home')
     params.dat = selected
     return update({view: 'detail', params: params})
@@ -65,7 +63,7 @@ function update (newState) {
 function chooseFiles () {
   remote.dialog.showOpenDialog({properties: ['openDirectory']}, function (directories) {
     if (!directories.length) return
-    rpc('share', {location: directories[0]})
+    rpc('link', {dir: directories[0]})
   })
 }
 
@@ -77,9 +75,9 @@ function rpc (action, params) {
 }
 
 function listDats () {
-  client.request('dats', function (err, dats) {
+  client.request('status', function (err, status) {
     if (err) return onerror(err)
-    update({view: 'home', dats: dats})
+    update({view: 'home', dats: status.dats})
   })
 }
 

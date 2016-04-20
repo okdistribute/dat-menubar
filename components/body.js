@@ -5,7 +5,7 @@ var spinner = require('./spinner.js')
 
 module.exports = function (state, onaction) {
   if (state.view === 'home') {
-    if (state.dats.length) return render(list())
+    if (Object.keys(state.dats).length) return render(list())
     else return render(empty())
   }
   if (state.view === 'settings') return render(settings())
@@ -22,7 +22,10 @@ module.exports = function (state, onaction) {
   }
 
   function list () {
-    var dats = state.dats.map(datItem)
+    var dats = Object.keys(state.dats)
+    dats = dats.map(function (key) {
+      return datItem(state.dats[key])
+    })
     return yo`<ul class="table-view">${dats}</ul>`
   }
 
@@ -46,21 +49,21 @@ module.exports = function (state, onaction) {
 
   function detail (dat) {
     console.log(dat)
-    var active = dat.value.state === 'active'
+    var active = dat.state === 'active'
     return yo`<ul class="table-view">
-      <li class="table-view-cell table-view-divider">${dat.value.location}</li>
-      <li class="table-view-cell small-text">dat://${dat.value.link} <button onclick=${
-          function () { onaction('copy', 'dat://' + dat.value.link) }
+      <li class="table-view-cell table-view-divider">${dat.dir}</li>
+      <li class="table-view-cell small-text">dat://${dat.link} <button onclick=${
+          function () { onaction('copy', 'dat://' + dat.link) }
         } class="btn"><span class="octicon octicon-clippy"></span><span>Copy</span></button></li>
       <li class="table-view-cell" >
-        <a onclick=${ function () { onaction(active ? 'stop' : 'start', {name: dat.key}) } }>
+        <a onclick=${ function () { onaction(active ? 'stop' : 'start', dat) } }>
           <span class="media-object pull-left icon icon-${active ? 'stop' : 'play'}"></span>
-          <span class="badge">${dat.value.state}</span>
+          <span class="badge">${dat.state}</span>
           <div class="media-body">${active ? 'Stop' : 'Start'}</div>
         </a>
       </li>
       <li class="table-view-cell" >
-        <a onclick=${ function () { onaction('delete', {name: dat.key}) } }>
+        <a onclick=${ function () { onaction('delete', dat) } }>
           <span class="media-object pull-left icon icon-trash"></span>
           <div class="media-body">Remove</div>
         </a>
@@ -72,13 +75,12 @@ module.exports = function (state, onaction) {
     return spinner()
   }
 
-  function datItem (item) {
-    var dat = item.value
-    var dir = path.basename(dat.location)
-    var tooltip = dat.location
+  function datItem (dat) {
+    var dir = path.basename(dat.dir)
+    var tooltip = dat.dir
     var badge = dat.state
     return yo`<li class="table-view-cell media">
-      ${button(dat.link, dir, badge, tooltip)}
+      ${button(dat.dir, dir, badge, tooltip)}
     </li>`
   }
 
